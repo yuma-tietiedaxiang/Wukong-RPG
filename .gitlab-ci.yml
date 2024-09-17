@@ -1,8 +1,9 @@
+image: maven:3.8-openjdk-17
+
 stages:
   - build
 
 build-job:
-  image: maven:3.9.9-eclipse-temurin-17-focal
   stage: build
   tags:
     - comp2120
