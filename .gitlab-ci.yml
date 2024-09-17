@@ -1,5 +1,7 @@
 build-job:
   stage: build
   allow_failure: true
+  tags:
+    - comp2120
   script:
     - mvn build
