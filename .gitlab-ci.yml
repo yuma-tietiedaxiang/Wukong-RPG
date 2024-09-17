@@ -12,4 +12,4 @@ build-job:
     paths:
       - target/*.jar
   script:
-    - mvn clean build
+    - mvn clean package
