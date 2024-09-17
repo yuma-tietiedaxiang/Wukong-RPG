@@ -1,6 +1,15 @@
+image: maven:3.8.6-jdk-17
+
+stages:
+  - build
+
 build-job:
   stage: build
   tags:
     - comp2120
+  artifacts:
+    when: always
+    paths:
+      - target/*.jar
   script:
-    - $MAVEN_HOME/bin/mvn clean build
+    - mvn clean build
