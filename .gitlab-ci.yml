@@ -1,0 +1,5 @@
+build-job:
+  stage: build
+  allow_failure: true
+  script:
+    - mvn build
