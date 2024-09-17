@@ -1,11 +1,8 @@
-image: maven:3.9.9-eclipse-temurin-17-focal
-variables:
-  DOCKER_DRIVER: overlay2
-
 stages:
   - build
 
 build-job:
+  image: maven:3.9.9-eclipse-temurin-17-focal
   stage: build
   tags:
     - comp2120
