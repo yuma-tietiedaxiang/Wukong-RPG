@@ -28,6 +28,13 @@ public interface ICombatObject {
     void move(int offsetX, int offsetY);
 
     /**
+     * Get the maximum health of this object (for issue #6).
+     * @author Fan Yu
+     * @return The maximum health of this object
+     */
+    int getMaxHealth();
+
+    /**
      * Get the health of this object (for issue #6).
      * @author Fan Yu
      * @return The health of this object
@@ -45,7 +52,21 @@ public interface ICombatObject {
     /**
      * Attack an enemy.
      * @author Fan Yu
-     * @return The total damage of the attacking
+     * @return The total damage to the enemy
      */
     int attack();
+
+    /**
+     * Get the damage value of this object (for issue #6).
+     * @author Fan Yu
+     * @return The damage value of this object
+     */
+    int getDamage();
+
+    /**
+     * Get the defense value of this object (for issue #6).
+     * @author Fan Yu
+     * @return The defense value of this object
+     */
+    int getDefense();
 }

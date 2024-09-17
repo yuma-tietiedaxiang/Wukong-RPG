@@ -3,7 +3,7 @@ package comp2120.ass3;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PlayerTest {
+public class MonsterTest {
     @Test
     public void test1() {
         // for dev only
