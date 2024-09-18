@@ -118,10 +118,10 @@ public class Game {
                 System.out.println("Game over, thank you for playing!");
 
             } else if (input.equals("I")) {// If the player wants to manage their inventory, call the corresponding method
-                //TODO manageInventory();
+                //TODO 还没添加这个方法 manageInventory();
 
             } else if (input.equals("P")) {// If the player wants to check their status, show the status
-                //TODO showStatus();
+                //TODO 还没添加这个方法 showStatus();
 
             } else if (input.equals("W") || input.equals("A") || input.equals("S") || input.equals("D")) {
                 movePlayer(input);// If the input is a movement command, move the player
@@ -212,16 +212,16 @@ public class Game {
      * @author Yu Ma
      */
     private void handlePosition() {
-        char location = map[playerY][playerX]; // Get the character at the player's position
+        char location = map[playerY][playerX]; // Get the place character at current player's position
         switch (location) {
             case 'H': // Home
                 restAtHome();
                 break;
             case 'W': // Weapon shop
-                weaponShop();
+                //TODO weaponShop();
                 break;
             case 'A': // Armor shop
-                armorShop();
+                //TODO armorShop();
                 break;
             case 'P': // Pet shop
                 petShop();
@@ -246,7 +246,7 @@ public class Game {
     private void restAtHome() {
         if (!slept) {// The player hasn't rested, here slept==false
             System.out.println("You rest at home, recovering stamina and health points.");
-            player.rest(); // Recover player's health and stamina
+            //TODO player.rest(); // Recover player's health and stamina
             System.out.println("Current health points: " + player.getHealth());
             System.out.println("Current stamina: " + player.getStamina());
             slept = true; // Mark that the player has rested
@@ -257,142 +257,156 @@ public class Game {
         scanner.nextLine(); // Wait for user input
     }
 
-    /**
-     * Manages interactions within the weapon shop.
-     * Allows the player to view and purchase weapons.
-     */
-    private void weaponShop() {
-        System.out.println("You arrive at the weapon shop.");
-        List<Weapon> weapons = new ArrayList<>();
-        weapons.add(new Weapon("Bamboo Arrow", 70, 25));
-        weapons.add(new Weapon("Iron Arrow", 130, 35));
-        weapons.add(new Weapon("Fire Arrow", 220, 55));
-
-        boolean inShop = true;
-        while (inShop) {
-            System.out.println("Your gem: " + player.getGold());
-            System.out.println("Please select a weapon to purchase: ");
-            int index = 1;
-            for (Weapon weapon : weapons) {
-                System.out.println(index + ". " + weapon.getName() + " - price: " + weapon.getPrice() + " Gems, weapon damage: " + weapon.getDamage());
-                index++;
-            }
-            System.out.println("0. Leave the shop");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Clear the newline character
-            if (choice == 0) {
-                inShop = false; // Exit the shop
-            } else if (choice > 0 && choice <= weapons.size()) {
-                Weapon selectedWeapon = weapons.get(choice - 1);
-                if (player.spendGold(selectedWeapon.getPrice())) {
-                    player.getInventory().addItem(selectedWeapon); // Add weapon to inventory
-                    System.out.println("You purchased: " + selectedWeapon.getName());
-                } else {
-                    System.out.println("Insufficient gems, unable to purchase the weapon.");
-                }
-            } else {
-                System.out.println("Invalid selection, please re-enter.");
-            }
-        }
-        System.out.println("Press 'Enter' to return...");
-        scanner.nextLine(); // Wait for user input
-    }
 
     /**
-     * Manages interactions within the armor shop.
-     * Allows the player to view and purchase armor.
+     * Manages interactions within the weapon shop. Allows the player to view and purchase weapons.
+     * @author Yu Ma
      */
-    private void armorShop() {
-        System.out.println("You arrive at the armor shop.");
-        List<Armor> armors = new ArrayList<>();
-        armors.add(new Armor("Wooden Shield", 80, 11));
-        armors.add(new Armor("Iron Pants", 90, 7));
-        armors.add(new Armor("Diamond Armor", 200, 16));
+//    private void weaponShop() {//TODO
+//        System.out.println("You arrive at the weapon shop.");
+//        List<Weapon> weapons = new ArrayList<>();
+//        weapons.add(new Weapon("Bamboo Arrow", 70, 25));
+//        weapons.add(new Weapon("Iron Arrow", 130, 35));
+//        weapons.add(new Weapon("Fire Arrow", 220, 55));
+//
+//        boolean inShop = true;
+//        while (inShop) {
+//            System.out.println("Your gems: " + player.getGold());
+//            System.out.println("Please select a weapon to purchase: ");
+//
+//            // List out weapons available
+//            int index = 1;
+//            for (Weapon weapon : weapons) {
+//                System.out.println(index + ". " + weapon.getName() + " - price: " + weapon.getPrice() + " Gems, weapon damage: " + weapon.getDamage());
+//                index++;
+//            }
+//            System.out.println("0. Leave the shop");
+//
+//            // user choose a weapon
+//            int choice = scanner.nextInt();
+//            scanner.nextLine(); // Clear the newline character
+//            if (choice == 0) {
+//                inShop = false; // Exit the shop
+//            } else if (choice > 0 && choice <= weapons.size()) {
+//                Weapon selectedWeapon = weapons.get(choice - 1);
+//                if (player.spendGold(selectedWeapon.getPrice())) {
+//                    //TODO 存货管理要做 player.getInventory().addItem(selectedWeapon); // Add weapon to inventory
+//                    System.out.println("You purchased: " + selectedWeapon.getName());
+//                } else {
+//                    System.out.println("Insufficient gems, unable to purchase the weapon.");
+//                }
+//            } else {
+//                System.out.println("Invalid selection, please re-enter.");
+//            }
+//        }
+//        System.out.println("Press 'Enter' to return...");
+//        scanner.nextLine(); // Wait for user input
+//    }
 
-        boolean inShop = true;
-        while (inShop) {
-            System.out.println("Your Gem: " + player.getGold());
-            System.out.println("Please select the armor you want to buy: ");
-            int index = 1;
-            for (Armor armor : armors) {
-                System.out.println(index + ". " + armor.getName() + " - price: " + armor.getPrice() + " Gems, defense: " + armor.getDefense());
-                index++;
-            }
-            System.out.println("0. Leave the shop");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Clear the newline character
-            if (choice == 0) {
-                inShop = false; // Exit the shop
-            } else if (choice > 0 && choice <= armors.size()) {
-                Armor selectedArmor = armors.get(choice - 1);
-                if (player.spendGold(selectedArmor.getPrice())) {
-                    player.getInventory().addItem(selectedArmor); // Add armor to inventory
-                    System.out.println("You purchased: " + selectedArmor.getName());
-                } else {
-                    System.out.println("Insufficient gems, unable to purchase the armor.");
-                }
-            } else {
-                System.out.println("Invalid choice, please enter again.");
-            }
-        }
-        System.out.println("Press 'Enter' to return...");
-        scanner.nextLine(); // Wait for user input
-    }
+    /**
+     * Manages interactions within the armor shop. Allows the player to view and purchase armor.
+     * @author Yu Ma
+     */
+//    private void armorShop() {//TODO
+//        System.out.println("You arrive at the armor shop.");
+//        List<Armor> armors = new ArrayList<>();
+//        armors.add(new Armor("Wooden Shield", 80, 11));
+//        armors.add(new Armor("Iron Pants", 90, 7));
+//        armors.add(new Armor("Diamond Armor", 200, 16));
+//
+//        boolean inShop = true;
+//        while (inShop) {
+//            System.out.println("Your Gem: " + player.getGold());
+//            System.out.println("Please select the armor you want to buy: ");
+//
+//            // List out weapons available
+//            int index = 1;
+//            for (Armor armor : armors) {
+//                System.out.println(index + ". " + armor.getName() + " - price: " + armor.getPrice() + " Gems, defense: " + armor.getDefense());
+//                index++;
+//            }
+//            System.out.println("0. Leave the shop");
+//            int choice = scanner.nextInt();
+//            scanner.nextLine(); // Clear the newline character
+//            if (choice == 0) {
+//                inShop = false; // Exit the shop
+//            } else if (choice > 0 && choice <= armors.size()) {
+//                Armor selectedArmor = armors.get(choice - 1);
+//                if (player.spendGold(selectedArmor.getPrice())) {
+//                    //TODO 存货管理部分 player.getInventory().addItem(selectedArmor); // Add armor to inventory
+//                    System.out.println("You purchased: " + selectedArmor.getName());
+//                } else {
+//                    System.out.println("Insufficient gems, unable to purchase the armor.");
+//                }
+//            } else {
+//                System.out.println("Invalid choice, please enter again.");
+//            }
+//        }
+//        System.out.println("Press 'Enter' to return...");
+//        scanner.nextLine(); // Wait for user input
+//    }
+
 
     /**
      * Displays a message indicating that the pet shop is currently unavailable.
+     * @author Yu Ma
      */
     private void petShop() {
+        //TODO issue10
         System.out.println("You arrive at the pet shop.");
         System.out.println("Temporarily unavailable.");
         System.out.println("Press 'Enter' to return...");
         scanner.nextLine(); // Wait for user input
     }
 
+
     /**
      * Manages interactions at the hospital, allowing the player to heal or recover stamina.
+     * @author Yu Ma
      */
-    private void hospital() {
-        System.out.println("You have arrived at the clinic.");
-        System.out.println("1. Minor Healing (Restores 20 HP, costs 20 gems)");
-        System.out.println("2. Major Healing (Restores 40 HP, costs 50 gems)");
-        System.out.println("3. Stamina Recovery (Restores 110 stamina, costs 50 gems)");
-        System.out.println("0. Leave the clinic");
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Clear the newline character
-        switch (choice) {
-            case 1:
-                if (player.spendGold(20)) {
-                    player.heal(20); // Heal the player
-                    System.out.println("Healing successful! Current health points: " + player.getHealth());
-                } else {
-                    System.out.println("Insufficient gems, unable to heal.");
-                }
-                break;
-            case 2:
-                if (player.spendGold(50)) {
-                    player.heal(40); // Heal the player
-                    System.out.println("Healing successful! Current health points: " + player.getHealth());
-                } else {
-                    System.out.println("Insufficient gems, unable to heal.");
-                }
-                break;
-            case 3:
-                if (player.spendGold(50)) {
-                    player.restoreStamina(110); // Restore stamina
-                    System.out.println("Stamina recovery successful! Current stamina value: " + player.getStamina());
-                } else {
-                    System.out.println("Insufficient gems, unable to restore stamina.");
-                }
-                break;
-            case 0:
-                break; // Exit the clinic
-            default:
-                System.out.println("Invalid selection.");
-                break;
-        }
-        System.out.println("Press Enter to return...");
-        scanner.nextLine(); // Wait for user input
+    private void hospital() {//TODO
+//        System.out.println("You have arrived at the clinic.");
+//        System.out.println("1. Minor Healing (Restores 20 HP, costs 20 gems)");
+//        System.out.println("2. Major Healing (Restores 40 HP, costs 50 gems)");
+//        System.out.println("3. Stamina Recovery (Restores 110 stamina, costs 50 gems)");
+//        System.out.println("0. Leave the clinic");
+//
+//        // Player choose one option
+//        int choice = scanner.nextInt();
+//        scanner.nextLine(); // Clear the newline character
+//        switch (choice) {
+//            case 1:
+//                if (player.spendGold(20)) {
+//                    player.heal(20); // Heal the player
+//                    System.out.println("Healing successful! Current health points: " + player.getHealth());
+//                } else {
+//                    System.out.println("Insufficient gems, unable to heal.");
+//                }
+//                break;
+//            case 2:
+//                if (player.spendGold(50)) {
+//                    player.heal(40); // Heal the player
+//                    System.out.println("Healing successful! Current health points: " + player.getHealth());
+//                } else {
+//                    System.out.println("Insufficient gems, unable to heal.");
+//                }
+//                break;
+//            case 3:
+//                if (player.spendGold(50)) {
+//                    player.restoreStamina(110); // Restore stamina
+//                    System.out.println("Stamina recovery successful! Current stamina value: " + player.getStamina());
+//                } else {
+//                    System.out.println("Insufficient gems, unable to restore stamina.");
+//                }
+//                break;
+//            case 0:
+//                break; // Exit the clinic
+//            default:
+//                System.out.println("Invalid selection.");
+//                break;
+//        }
+//        System.out.println("Press Enter to return...");
+//        scanner.nextLine(); // Wait for user input
     }
 
     /**
@@ -401,7 +415,7 @@ public class Game {
      */
     private void battleField() {
         // Implementation will be added later
-        //TODO battleField
+        //TODO 还没添加这个方法 battleField
     }
 
 
