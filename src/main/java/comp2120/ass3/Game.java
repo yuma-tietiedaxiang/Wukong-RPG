@@ -22,7 +22,10 @@ public class Game {
         this.scanner = new Scanner(System.in);
         this.random = new Random();
 
-        gameEngine = new GameEngine("/Users/yoma/comp6120/A2-GP/src/main/java/comp2120/ass3/resources/config/map.json", "/Users/yoma/comp6120/A2-GP/src/main/java/comp2120/ass3/resources/config/monsterConfig.json");
+        gameEngine = new GameEngine(
+                "src/main/java/comp2120/ass3/resources/config/map.json",
+                "src/main/java/comp2120/ass3/resources/config/monsterConfig.json"
+        );
 
     }
 
