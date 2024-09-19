@@ -771,8 +771,10 @@ public class Game {
             }
             // Reduce the monster's health by the total damage dealt
             monster.reduceHealth(totalDamage);
+            //fixbug here for merge request
         }
     }
+
 
     /**
      * Executes the monster's attack on the player. The damage is calculated based on the monster's
