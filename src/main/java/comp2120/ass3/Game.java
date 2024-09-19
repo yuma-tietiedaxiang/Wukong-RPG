@@ -9,6 +9,8 @@ public class Game {
     private Random random;
     private boolean slept = false; // flags whether the player has rested
 
+    private GameEngine gameEngine;
+
     // map attributes
     private char[][] map;
     private int playerX;
@@ -17,6 +19,11 @@ public class Game {
     public Game() {
         scanner = new Scanner(System.in);
         random = new Random();
+        this.scanner = new Scanner(System.in);
+        this.random = new Random();
+
+        gameEngine = new GameEngine("/Users/yoma/comp6120/A2-GP/src/main/java/comp2120/ass3/resources/config/map.json", "/Users/yoma/comp6120/A2-GP/src/main/java/comp2120/ass3/resources/config/monsterConfig.json");
+
     }
 
     public void startGame() {
