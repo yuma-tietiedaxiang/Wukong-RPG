@@ -410,13 +410,408 @@ public class Game {
     }
 
     /**
-     * Placeholder for managing interactions in the battlefield.
-     * Currently does not contain any functionality.
+     * Simulates the battlefield scene where the player can move around, encounter monsters, and battle them.
+     * The player can use WASD keys to move and can exit the battlefield by pressing 'Q'.
+     * If all monsters are defeated, the player automatically returns to the village.
+     *
+     * @author Yu Ma
      */
     private void battleField() {
-        // Implementation will be added later
-        //TODO 还没添加这个方法 battleField
+        System.out.println("You have left the village and entered the battlefield.");
+
+        // Initialize the battlefield map
+        char[][] battlefield = new char[15][20];
+
+        // Fill the battlefield map with spaces
+        for (int i = 0; i < battlefield.length; i++) {
+            Arrays.fill(battlefield[i], ' ');
+        }
+
+        // Set the boundary (walls)
+        for (int i = 0; i < battlefield.length; i++) {
+            battlefield[i][0] = '■'; // Left wall
+            battlefield[i][battlefield[0].length - 1] = '■'; // Right wall
+        }
+        for (int j = 0; j < battlefield[0].length; j++) {
+            battlefield[0][j] = '■'; // Top wall
+            battlefield[battlefield.length - 1][j] = '■'; // Bottom wall
+        }
+
+        // Set the gate for returning to the village
+        battlefield[7][0] = 'G'; // Village entrance
+
+        // Set the player's initial position
+        int battlePlayerX = battlefield[0].length - 2; // Column position
+        int battlePlayerY = 7; // Row position
+
+        // Place monsters on the battlefield
+        List<Monster> monsters = new ArrayList<>();
+        List<int[]> monsterPositions = new ArrayList<>();
+        int numMonsters = 3; // Number of monsters
+        for (int i = 0; i < numMonsters; i++) {
+            // Randomly generate monster positions within the battlefield
+            int monsterX = random.nextInt(battlefield[0].length - 2) + 1;
+            int monsterY = random.nextInt(battlefield.length - 2) + 1;
+            battlefield[monsterY][monsterX] = '怪'; // Representing the monster
+            monsterPositions.add(new int[]{monsterX, monsterY});
+        }
+
+        // Player stays in the battlefield until they decide to leave
+        boolean inBattlefield = true;
+        while (inBattlefield) {
+            displayBattlefieldMap(battlefield, battlePlayerX, battlePlayerY); // Display battlefield map
+
+            // Prompt the player to enter a command for movement or exit
+            System.out.println("Please enter a command (WASD to move, Q to leave the battlefield)");
+            String input = scanner.nextLine().toUpperCase();
+            if (input.equals("Q")) {
+                inBattlefield = false; // Exit the battlefield
+                System.out.println("You have returned to the village.");
+            } else if (input.equals("W") || input.equals("A") || input.equals("S") || input.equals("D")) {
+                // Move the player based on input
+                int newX = battlePlayerX;
+                int newY = battlePlayerY;
+                switch (input) {
+                    case "W": newY--; break; // Move up
+                    case "A": newX--; break; // Move left
+                    case "S": newY++; break; // Move down
+                    case "D": newX++; break; // Move right
+                }
+                // Check if the movement is within the battlefield boundary
+                if (newX >= 0 && newX < battlefield[0].length && newY >= 0 && newY < battlefield.length) {
+                    if (battlefield[newY][newX] != '■') { // Check if the player hits a wall
+                        battlePlayerX = newX;
+                        battlePlayerY = newY;
+
+                        // Check what the player encounters at the new position
+                        if (battlefield[newY][newX] == '怪') { // Encounter a monster
+                            // Start the battle with the monster
+                            System.out.println("You encountered a monster!");
+                            Monster monster = generateMonster();
+                            battle(monster);
+
+                            // Remove the monster from the battlefield after defeat
+                            battlefield[newY][newX] = ' ';
+                            int finalNewX = newX;
+                            int finalNewY = newY;
+                            // Remove the monster position from the list
+                            monsterPositions.removeIf(pos -> pos[0] == finalNewX && pos[1] == finalNewY);
+                            // Check if all monsters are defeated
+                            if (monsterPositions.isEmpty()) {
+                                System.out.println("You have defeated all the monsters and returned to the village.");
+                                inBattlefield = false; // Return to the village after all monsters are defeated
+                            }
+                        } else if (battlefield[newY][newX] == 'G') {
+                            // Player returns to the village
+                            System.out.println("You have returned to the village.");
+                            inBattlefield = false;
+                        }
+
+                        // Move the monsters after the player moves
+                        moveMonsters(battlefield, monsterPositions, battlePlayerX, battlePlayerY);
+                    } else {
+                        System.out.println("Bumped into a wall, cannot move!"); // Hit a wall
+                    }
+                } else {
+                    System.out.println("Cannot move there!"); // Out of bounds
+                }
+            } else {
+                System.out.println("Invalid input, please re-enter."); // Handle invalid commands
+            }
+
+            // Check if the player's health has dropped to zero
+            if (player.getHealth() <= 0) {
+                System.out.println("You were defeated, game over.");
+                System.exit(0); // End the game if the player is defeated
+            }
+        }
+        slept = false; // Player can rest again after the battle is over
     }
+
+
+    /**
+     * Displays the battlefield map with the player's current position.
+     * The map includes walls, monsters, and the player, represented by 'Y'.
+     * It also shows the player's health, stamina, and gold.
+     *
+     * @param battlefield The 2D char array representing the battlefield
+     * @param battlePlayerX The X-coordinate of the player on the battlefield
+     * @param battlePlayerY The Y-coordinate of the player on the battlefield
+     * @author Yu Ma
+     */
+    private void displayBattlefieldMap(char[][] battlefield, int battlePlayerX, int battlePlayerY) {
+        // Clear the screen
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
+        // Display the battlefield with the player's position
+        for (int i = 0; i < battlefield.length; i++) {
+            for (int j = 0; j < battlefield[0].length; j++) {
+                if (i == battlePlayerY && j == battlePlayerX) {
+                    System.out.print("Y"); // Represents the player
+                } else {
+                    System.out.print(battlefield[i][j]); // Display other battlefield elements
+                }
+            }
+            System.out.println();
+        }
+        // Display player's status (health, stamina, and gold)
+        System.out.println("Current health points: " + player.getHealth() + "/" + player.getMaxHealth());
+        System.out.println("Current stamina: " + player.getStamina() + "/" + player.getMaxStamina());
+        System.out.println("Gold: " + player.getGold());
+    }
+
+
+    /**
+     * Moves the monsters randomly on the battlefield and checks if any monster encounters the player.
+     * If a monster encounters the player, a battle begins.
+     *
+     * @param battlefield The 2D char array representing the battlefield
+     * @param monsterPositions A list of monster positions represented by int arrays [x, y]
+     * @param playerX The X-coordinate of the player on the battlefield
+     * @param playerY The Y-coordinate of the player on the battlefield
+     * @author Yu Ma
+     */
+    private void moveMonsters(char[][] battlefield, List<int[]> monsterPositions, int playerX, int playerY) {
+        // Move each monster
+        Iterator<int[]> iterator = monsterPositions.iterator();
+        while (iterator.hasNext()) {
+            int[] pos = iterator.next();
+            int x = pos[0];
+            int y = pos[1];
+
+            // Clear the old position
+            battlefield[y][x] = ' ';
+
+            // Randomly move the monster
+            int newX = x;
+            int newY = y;
+            int dir = random.nextInt(4);
+            switch (dir) {
+                case 0: newY--; break; // Move up
+                case 1: newY++; break; // Move down
+                case 2: newX--; break; // Move left
+                case 3: newX++; break; // Move right
+            }
+
+            // Check if the new position is within the boundaries and is empty
+            if (newX >= 1 && newX < battlefield[0].length - 1 && newY >= 1 && newY < battlefield.length - 1 && battlefield[newY][newX] == ' ') {
+                pos[0] = newX;
+                pos[1] = newY;
+            }
+
+            // Place the monster at the new position
+            battlefield[pos[1]][pos[0]] = 'M'; // Represents the monster
+
+            // Check if the monster encounters the player
+            if (pos[0] == playerX && pos[1] == playerY) {
+                // Monster encounters the player, start a battle
+                System.out.println("A monster has encountered you!");
+                Monster monster = generateMonster();
+                battle(monster);
+
+                // Remove the monster after it is defeated
+                battlefield[pos[1]][pos[0]] = ' ';
+                iterator.remove(); // Exit the loop to avoid modifying the list during iteration
+                break;
+            }
+        }
+    }
+
+
+    /**
+     * Generates a new monster with attributes based on the current wave of battles.
+     * The monster's name, health, damage, defense, and other attributes are randomized.
+     *
+     * @return A new Monster object with randomized
+     * @author Yu Ma
+     */
+    private Monster generateMonster() {
+        // Array of monster names
+        String[] monsterNames = {"Skeleton Archer", "Zombie", "Spider"};
+        String name = monsterNames[random.nextInt(monsterNames.length)];
+
+        // Set monster stats based on the current wave
+        int health = 180 + wave * 10;
+        int damage = 15 + wave * 5;
+        int defense = 10 + wave * 2;
+        int criticalChance = 10 + wave * 2;
+        int dodgeChance = 5 + wave * 2;
+        int goldReward = 30 + wave * 5;
+
+        return new Monster(name, health, damage, defense, criticalChance, dodgeChance, goldReward);
+    }
+
+
+    /**
+     * Simulates a battle between the player and a monster. The player can choose different attack types,
+     * each consuming stamina, or attempt to escape. The battle ends when either the player or the monster
+     * is defeated or if the player successfully escapes.
+     *
+     * @param monster The monster the player is battling
+     * @author Yu Ma
+     */
+    private void battle(Monster monster) {
+        System.out.println("You encountered a " + monster.getName() + "!");
+        boolean inBattle = true;
+
+        // Loop until the battle ends
+        while (inBattle) {
+            // Player's action choices
+            System.out.println("\nPlease choose your action:");
+            System.out.println("1. Light Attack (Damage +25, consumes 2 stamina)");
+            System.out.println("2. Normal Attack (Damage +80, consumes 8 stamina)");
+            System.out.println("3. Heavy Attack (Damage +160, consumes 20 stamina)");
+            System.out.println("4. Escape (Consumes 10 stamina)");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    // Light Attack
+                    if (player.getStamina() >= 2) {
+                        player.reduceStamina(2);
+                        attackMonster(monster, 25);
+                        if (monster.getHealth() <= 0) {
+                            System.out.println("You defeated the " + monster.getName() + "!");
+                            player.addGold(monster.getGoldReward());
+                            wave++;
+                            inBattle = false;
+                        } else {
+                            monsterAttack(monster);
+                        }
+                    } else {
+                        System.out.println("Not enough stamina to attack!");
+                    }
+                    break;
+                case 2:
+                    // Normal Attack
+                    if (player.getStamina() >= 8) {
+                        player.reduceStamina(8);
+                        attackMonster(monster, 80);
+                        if (monster.getHealth() <= 0) {
+                            System.out.println("You defeated the " + monster.getName() + "!");
+                            player.addGold(monster.getGoldReward());
+                            wave++;
+                            inBattle = false;
+                        } else {
+                            monsterAttack(monster);
+                        }
+                    } else {
+                        System.out.println("Not enough stamina to attack!");
+                    }
+                    break;
+                case 3:
+                    // Heavy Attack
+                    if (player.getStamina() >= 20) {
+                        player.reduceStamina(20);
+                        attackMonster(monster, 160);
+                        if (monster.getHealth() <= 0) {
+                            System.out.println("You defeated the " + monster.getName() + "！");
+                            player.addGold(monster.getGoldReward());
+                            wave++;
+                            inBattle = false;
+                        } else {
+                            monsterAttack(monster);
+                        }
+                    } else {
+                        System.out.println("Not enough stamina to attack!");
+                    }
+                    break;
+                case 4:
+                    // Escape
+                    if (player.getStamina() >= 10) {
+                        player.reduceStamina(10);
+                        System.out.println("You successfully escaped!");
+                        inBattle = false;
+                    } else {
+                        System.out.println("Not enough stamina to escape!");
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid selection, please re-enter.");
+                    break;
+            }
+
+            // Check if the player was defeated
+            if (player.getHealth() <= 0) {
+                System.out.println("You were defeated, game over.");
+                System.exit(0); // End the game
+            }
+        }
+    }
+
+    /**
+     * Calculates and executes an attack on the monster. The attack damage is based on the player's attack power,
+     * additional bonus damage, and the monster's defense. It also considers the monster's dodge chance and the
+     * player's critical hit chance.
+     *
+     * @param monster The monster that is being attacked
+     * @param extraDamage Additional damage to be added to the player's base attack
+     * @author Yu Ma
+     */
+    private void attackMonster(Monster monster, int extraDamage) {
+        // Calculate the total damage considering player's base attack, extra damage, and monster's defense
+        int totalDamage = player.attack() + extraDamage - monster.getDefense();
+
+        // Ensure the total damage is not less than zero
+        if (totalDamage < 0) totalDamage = 0;
+
+        // Check if the monster dodges the attack
+        if (random.nextInt(100) < monster.getDodgeChance()) {
+            System.out.println(monster.getName() + " dodged your attack!");
+        } else {
+            // Check for a critical hit
+            if (random.nextInt(100) < player.getCriticalChance()) {
+                totalDamage *= 1.5; // Apply critical hit multiplier
+                System.out.println("Critical hit! You dealt " + monster.getName() + " " + totalDamage + " points of damage.");
+            } else {
+                System.out.println("You dealt " + monster.getName() + " " + totalDamage + " points of damage.");
+            }
+            // Reduce the monster's health by the total damage dealt
+            monster.reduceHealth(totalDamage);
+            //fixbug here for merge request
+        }
+    }
+
+
+    /**
+     * Executes the monster's attack on the player. The damage is calculated based on the monster's
+     * attack power and the player's defense. It also considers the player's dodge chance and the
+     * monster's critical hit chance.
+     *
+     * @param monster The monster performing the attack
+     * @author Yu Ma
+     */
+    private void monsterAttack(Monster monster) {
+        // Calculate the total damage, subtracting player's defense from the monster's attack
+        int totalDamage = monster.attack() - player.getDefense();
+
+        // Ensure the total damage is not less than zero
+        if (totalDamage < 0) totalDamage = 0;
+
+        // Check if the player dodges the attack
+        if (random.nextInt(100) < player.getDodgeChance()) {
+            System.out.println("You dodged " + monster.getName() + "'s attack!");
+        } else {
+            // Check for a critical hit by the monster
+            if (random.nextInt(100) < monster.getCriticalChance()) {
+                totalDamage *= 1.5; // Apply critical hit multiplier
+                System.out.println(monster.getName() + " landed a critical hit on you, dealing " + totalDamage + " points of damage!");
+            } else {
+                System.out.println(monster.getName() + " dealt " + totalDamage + " points of damage to you.");
+            }
+
+            // Reduce the player's health by the total damage dealt
+            player.reduceHealth(totalDamage);
+
+            // Display the player's remaining health points
+            System.out.println("Your remaining health points: " + player.getHealth());
+        }
+    }
+
+
 
 
 

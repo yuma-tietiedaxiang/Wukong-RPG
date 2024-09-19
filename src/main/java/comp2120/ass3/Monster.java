@@ -19,4 +19,45 @@ public class Monster {
         this.goldReward = goldReward;
     }
 
+    /**
+     * Returns the monstor's base attack damage.
+     *
+     * @return The player's base attack damage
+     * @author Yu Ma
+     */
+    public int attack() {
+        // Return the player's base damage
+        return this.damage;
+    }
+
+
+    /**
+     * Reduces the monstor's health by a specified amount.     *
+     * @param amount The amount of health to reduce
+     * @author Yu Ma
+     */
+    public void reduceHealth(int amount) {
+        // Subtract the specified amount from the player's current health
+        this.health -= amount;
+    }
+
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+    public int getHealth() {
+        return health;
+    }
+    public int getGoldReward() {
+        return goldReward;
+    }
+    public int getDefense() {return defense;}
+    public int getDodgeChance() {
+        return dodgeChance;
+    }
+    public int getCriticalChance() {
+        return criticalChance;
+    }
+
 }
