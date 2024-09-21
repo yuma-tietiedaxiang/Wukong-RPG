@@ -1,5 +1,5 @@
 package comp2120.ass3;
-public class Player {
+public class Player implements IPlayer{
     private String name;
     private int health;
     private int maxHealth;
@@ -61,12 +61,17 @@ public class Player {
         int totalDamage = this.damage;
 
         // If a weapon is equipped, add its damage to the total
-        //TODO 存货管理
-//        if (inventory.getEquippedWeapon() != null) {
-//            totalDamage += inventory.getEquippedWeapon().getDamage();
-//        }
+
+        if (inventory.getEquippedWeapon() != null) {
+            totalDamage += inventory.getEquippedWeapon().getDamage();
+        }
 
         return totalDamage;
+    }
+
+    @Override
+    public int getDamage() {
+        return 0;
     }
 
     /**
@@ -80,10 +85,9 @@ public class Player {
         int totalDefense = this.defense;
 
         // If the player has equipped armor, add its defense value to the total defense
-        //TODO 存货管理
-//        if (inventory.getEquippedArmor() != null) {
-//            totalDefense += inventory.getEquippedArmor().getDefense();
-//        }
+        if (inventory.getEquippedArmor() != null) {
+            totalDefense += inventory.getEquippedArmor().getDefense();
+        }
 
         // Return the calculated total defense
         return totalDefense;
@@ -157,6 +161,23 @@ public class Player {
     public int getHealth() {
         return health;
     }
+
+    @Override
+    public int getX() {
+        return Game.playerX;
+    }
+
+    @Override
+    public int getY() {
+        return Game.playerY;
+    }
+
+    @Override
+    public void move(int offsetX, int offsetY) {
+        Game.playerX += offsetX;
+        Game.playerY += offsetY;
+    }
+
     public int getMaxHealth() {
         return maxHealth;
     }
@@ -172,6 +193,9 @@ public class Player {
     }
     public int getDodgeChance() {
         return dodgeChance;
+    }
+    public Inventory getInventory() {
+        return inventory;
     }
 
 }
