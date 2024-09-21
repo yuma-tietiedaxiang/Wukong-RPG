@@ -9,14 +9,24 @@ public class Game {
     private Random random;
     private boolean slept = false; // flags whether the player has rested
 
+    private GameEngine gameEngine;
+
     // map attributes
     private char[][] map;
-    private int playerX;
-    private int playerY;
+    public static int playerX;
+    public static int playerY;
 
     public Game() {
         scanner = new Scanner(System.in);
         random = new Random();
+        this.scanner = new Scanner(System.in);
+        this.random = new Random();
+
+        gameEngine = new GameEngine(
+                "src/main/java/comp2120/ass3/resources/config/map.json",
+                "src/main/java/comp2120/ass3/resources/config/monsterConfig.json"
+        );
+
     }
 
     public void startGame() {
@@ -118,7 +128,7 @@ public class Game {
                 System.out.println("Game over, thank you for playing!");
 
             } else if (input.equals("I")) {// If the player wants to manage their inventory, call the corresponding method
-                //TODO 还没添加这个方法 manageInventory();
+                manageInventory();
 
             } else if (input.equals("P")) {// If the player wants to check their status, show the status
                 //TODO 还没添加这个方法 showStatus();
@@ -290,7 +300,7 @@ public class Game {
 //            } else if (choice > 0 && choice <= weapons.size()) {
 //                Weapon selectedWeapon = weapons.get(choice - 1);
 //                if (player.spendGold(selectedWeapon.getPrice())) {
-//                    //TODO 存货管理要做 player.getInventory().addItem(selectedWeapon); // Add weapon to inventory
+//                    player.getInventory().addItem(selectedWeapon); // Add weapon to inventory
 //                    System.out.println("You purchased: " + selectedWeapon.getName());
 //                } else {
 //                    System.out.println("Insufficient gems, unable to purchase the weapon.");
@@ -333,7 +343,7 @@ public class Game {
 //            } else if (choice > 0 && choice <= armors.size()) {
 //                Armor selectedArmor = armors.get(choice - 1);
 //                if (player.spendGold(selectedArmor.getPrice())) {
-//                    //TODO 存货管理部分 player.getInventory().addItem(selectedArmor); // Add armor to inventory
+//                    player.getInventory().addItem(selectedArmor); // Add armor to inventory
 //                    System.out.println("You purchased: " + selectedArmor.getName());
 //                } else {
 //                    System.out.println("Insufficient gems, unable to purchase the armor.");
@@ -452,7 +462,7 @@ public class Game {
             // Randomly generate monster positions within the battlefield
             int monsterX = random.nextInt(battlefield[0].length - 2) + 1;
             int monsterY = random.nextInt(battlefield.length - 2) + 1;
-            battlefield[monsterY][monsterX] = '怪'; // Representing the monster
+            battlefield[monsterY][monsterX] = 'M'; // Representing the monster
             monsterPositions.add(new int[]{monsterX, monsterY});
         }
 
@@ -484,10 +494,12 @@ public class Game {
                         battlePlayerY = newY;
 
                         // Check what the player encounters at the new position
-                        if (battlefield[newY][newX] == '怪') { // Encounter a monster
+                        if (battlefield[newY][newX] == 'M') { // Encounter a monster
                             // Start the battle with the monster
                             System.out.println("You encountered a monster!");
                             Monster monster = generateMonster();
+                            monster.setMonsterX(newX);
+                            monster.setMonsterY(newY);
                             battle(monster);
 
                             // Remove the monster from the battlefield after defeat
@@ -608,6 +620,8 @@ public class Game {
                 // Monster encounters the player, start a battle
                 System.out.println("A monster has encountered you!");
                 Monster monster = generateMonster();
+                monster.setMonsterX(pos[0]);
+                monster.setMonsterY(pos[1]);
                 battle(monster);
 
                 // Remove the monster after it is defeated
@@ -812,6 +826,139 @@ public class Game {
     }
 
 
+    /**
+     * Manages the player's inventory, allowing them to equip weapons and armor
+     * or return to the previous menu.
+     *
+     * @author: Yu Ma
+     */
+    private void manageInventory() {
+        // Get the player's inventory
+        Inventory inventory = player.getInventory();
+        boolean inInventory = true;
+
+        // Loop to manage inventory until the player chooses to return
+        while (inInventory) {
+            System.out.println("\nYour Bag:");
+            inventory.showInventory(); // Display the inventory items
+            System.out.println("1. Equip Weapon");
+            System.out.println("2. Equip Armor");
+            System.out.println("0. Return");
+
+            // Get the user's choice
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear the newline character
+
+            switch (choice) {
+                case 1:
+                    equipWeapon(); // Equip a weapon
+                    break;
+                case 2:
+                    equipArmor(); // Equip armor
+                    break;
+                case 0:
+                    inInventory = false; // Exit inventory management
+                    break;
+                default:
+                    System.out.println("Invalid choice, please re-enter."); // Handle invalid input
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Allows the player to equip a weapon from their inventory.
+     * If no weapons are available, a message is displayed.
+     *
+     * @author: Yu Ma
+     */
+    private void equipWeapon() {
+        // Get the player's inventory
+        Inventory inventory = player.getInventory();
+        List<Item> items = inventory.getItems();
+        List<Weapon> weapons = new ArrayList<>();
+
+        // Collect all weapons from the inventory
+        for (Item item : items) {
+            if (item instanceof Weapon) {
+                weapons.add((Weapon) item);
+            }
+        }
+
+        // Check if there are any weapons to equip
+        if (weapons.isEmpty()) {
+            System.out.println("You have no weapon to equip.");
+            return;
+        }
+
+        // Display available weapons
+        System.out.println("Please select a weapon to equip:");
+        int index = 1;
+        for (Weapon weapon : weapons) {
+            System.out.println(index + ". " + weapon.getName() + " - damage: " + weapon.getDamage());
+            index++;
+        }
+
+        // Get user's choice
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline character
+
+        // Equip the selected weapon
+        if (choice > 0 && choice <= weapons.size()) {
+            Weapon selectedWeapon = weapons.get(choice - 1);
+            inventory.equipWeapon(selectedWeapon);
+            System.out.println("You equipped: " + selectedWeapon.getName());
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    }
+
+    /**
+     * Allows the player to equip armor from their inventory.
+     * If no armor is available, a message is displayed.
+     *
+     * @author: Yu Ma
+     */
+    private void equipArmor() {
+        // Get the player's inventory
+        Inventory inventory = player.getInventory();
+        List<Item> items = inventory.getItems();
+        List<Armor> armors = new ArrayList<>();
+
+        // Collect all armors from the inventory
+        for (Item item : items) {
+            if (item instanceof Armor) {
+                armors.add((Armor) item);
+            }
+        }
+
+        // Check if there are any armors to equip
+        if (armors.isEmpty()) {
+            System.out.println("You have no armor to equip.");
+            return;
+        }
+
+        // Display available armors
+        System.out.println("Please select armor to equip:");
+        int index = 1;
+        for (Armor armor : armors) {
+            System.out.println(index + ". " + armor.getName() + " - defense: " + armor.getDefense());
+            index++;
+        }
+
+        // Get user's choice
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline character
+
+        // Equip the selected armor
+        if (choice > 0 && choice <= armors.size()) {
+            Armor selectedArmor = armors.get(choice - 1);
+            inventory.equipArmor(selectedArmor);
+            System.out.println("You equipped: " + selectedArmor.getName());
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    }
 
 
 
