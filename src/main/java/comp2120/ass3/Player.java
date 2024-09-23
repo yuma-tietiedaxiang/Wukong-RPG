@@ -148,6 +148,13 @@ public class Player {
 //        }
 //    }
 
+    /**
+    * Get the items what the player have.
+    * @author Yingxuan Tang
+    */
+    public Inventory getInventory() {
+        return inventory;
+    }
 
 
     // Getters and setters
