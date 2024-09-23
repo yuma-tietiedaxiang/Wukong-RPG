@@ -1,29 +1,3 @@
-#image: maven:3.8-openjdk-17
-#
-#stages:
-#  - build
-#  - test
-#
-#build-job:
-#  stage: build
-#  tags:
-#    - comp2120
-#  artifacts:
-#    when: always
-#    paths:
-#      - target/*.jar
-#  script:
-#    - mvn clean package
-#
-#test-job:
-#  stage: test
-#  tags:
-#    - comp2120
-#  script:
-#    - mvn test
-
-
-
 image: maven:3.8-openjdk-17
 
 stages:
@@ -32,14 +6,18 @@ stages:
 
 build-job:
   stage: build
-  script:
-    - mvn clean package
+  tags:
+    - comp2120
   artifacts:
     when: always
     paths:
       - target/*.jar
+  script:
+    - mvn clean package
 
 test-job:
   stage: test
+  tags:
+    - comp2120
   script:
     - mvn test
