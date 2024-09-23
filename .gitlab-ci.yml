@@ -19,5 +19,7 @@ test-job:
   stage: test
   tags:
     - comp2120
+    - comp2300
+    - comp2100
   script:
     - mvn test
