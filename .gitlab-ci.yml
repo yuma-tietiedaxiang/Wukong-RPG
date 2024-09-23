@@ -8,6 +8,8 @@ build-job:
   stage: build
   tags:
     - comp2120
+    - comp2300
+    - comp2100
   artifacts:
     when: always
     paths:
