@@ -7,9 +7,9 @@ stages:
 build-job:
   stage: build
   tags:
-    - comp2120
     - comp2300
     - comp2100
+    - comp2120
   artifacts:
     when: always
     paths:
@@ -20,8 +20,8 @@ build-job:
 test-job:
   stage: test
   tags:
-    - comp2120
     - comp2300
     - comp2100
+    - comp2120
   script:
     - mvn test
