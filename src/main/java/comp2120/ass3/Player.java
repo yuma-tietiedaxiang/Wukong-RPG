@@ -137,16 +137,16 @@ public class Player {
 
     /**
      * Player spend gems for payment.
-     * @author Yu Ma
+     * @author Yingxuan Tang
      */
-//    public boolean spendGold(int amount) {//TODO
-//        if (gold >= amount) {
-//            gold -= amount;
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+    public boolean spendGold(int amount) {//TODO
+        if (gold >= amount) {
+            gold -= amount;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
     * Get the items what the player have.

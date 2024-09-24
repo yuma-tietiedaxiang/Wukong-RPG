@@ -57,6 +57,16 @@ public class Inventory {
 
 
     /**
+     * Adds an item to the inventory.
+     *
+     * @param item The item to be added.
+     * @author Yingxuan Tang
+     */
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    /**
      * Returns the list of items in the inventory.
      *
      * @return A list of items.
