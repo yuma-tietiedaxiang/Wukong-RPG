@@ -9,14 +9,24 @@ public class Game {
     private Random random;
     private boolean slept = false; // flags whether the player has rested
 
+    private GameEngine gameEngine;
+
     // map attributes
     private char[][] map;
-    private int playerX;
-    private int playerY;
+    public static int playerX;
+    public static int playerY;
 
     public Game() {
         scanner = new Scanner(System.in);
         random = new Random();
+        this.scanner = new Scanner(System.in);
+        this.random = new Random();
+
+        gameEngine = new GameEngine(
+                "src/main/java/comp2120/ass3/resources/config/map.json",
+                "src/main/java/comp2120/ass3/resources/config/monsterConfig.json"
+        );
+
     }
 
     public void startGame() {
@@ -218,10 +228,10 @@ public class Game {
                 restAtHome();
                 break;
             case 'W': // Weapon shop
-                weaponShop();
+                //TODO weaponShop();
                 break;
             case 'A': // Armor shop
-                armorShop();
+                //TODO armorShop();
                 break;
             case 'P': // Pet shop
                 petShop();
@@ -452,7 +462,7 @@ public class Game {
             // Randomly generate monster positions within the battlefield
             int monsterX = random.nextInt(battlefield[0].length - 2) + 1;
             int monsterY = random.nextInt(battlefield.length - 2) + 1;
-            battlefield[monsterY][monsterX] = '怪'; // Representing the monster
+            battlefield[monsterY][monsterX] = 'M'; // Representing the monster
             monsterPositions.add(new int[]{monsterX, monsterY});
         }
 
@@ -608,6 +618,8 @@ public class Game {
                 // Monster encounters the player, start a battle
                 System.out.println("A monster has encountered you!");
                 Monster monster = generateMonster();
+                monster.setMonsterX(pos[0]);
+                monster.setMonsterY(pos[1]);
                 battle(monster);
 
                 // Remove the monster after it is defeated
@@ -683,7 +695,7 @@ public class Game {
      * is defeated or if the player successfully escapes.
      *
      * @param monster The monster the player is battling
-     * @author Yu Ma, Yingxuan Tang
+     * @author Yu Ma
      */
     private void battle(Monster monster) {
         System.out.println("You encountered a " + monster.getName() + "!");
@@ -762,7 +774,6 @@ public class Game {
                     } else {
                         System.out.println("Not enough stamina to escape!");  // Inform player if stamina is insufficient
                     }
-
                     break;
                 default:
                     System.out.println("Invalid selection, please re-enter.");

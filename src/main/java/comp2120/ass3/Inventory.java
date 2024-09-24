@@ -75,4 +75,12 @@ public class Inventory {
     public List<Item> getItems() {
         return items;
     }
+
+    //getter
+    public Weapon getEquippedWeapon() {
+        return equippedWeapon;
+    }
+    public Armor getEquippedArmor() {
+        return equippedArmor;
+    }
 }
