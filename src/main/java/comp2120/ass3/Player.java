@@ -201,8 +201,5 @@ public class Player implements IPlayer{
     public int getDodgeChance() {
         return dodgeChance;
     }
-    public Inventory getInventory() {
-        return inventory;
-    }
 
 }
