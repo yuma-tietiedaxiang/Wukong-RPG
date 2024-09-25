@@ -2,6 +2,10 @@ package comp2120.ass3.mock;
 
 import comp2120.ass3.IPlayer;
 
+/**
+ * Mock of IPlayer for test.
+ * @author Fan Yu
+ */
 public class MockPlayer implements IPlayer {
     @Override
     public int getX() {

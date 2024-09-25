@@ -2,6 +2,10 @@ package comp2120.ass3.mock;
 
 import comp2120.ass3.IMonster;
 
+/**
+ * Mock of IMonster for test.
+ * @author Fan Yu
+ */
 public class MockMonster implements IMonster {
     @Override
     public int getX() {
