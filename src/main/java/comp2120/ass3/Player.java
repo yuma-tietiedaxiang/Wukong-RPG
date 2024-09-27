@@ -82,8 +82,8 @@ public class Player implements IPlayer {
         this.dodgeChance = dodgeChance;
         this.inventory = new Inventory();
         this.gold = 200; // Initial amount of gold (gems) for the player.
-        this.x = 0; // 初始化 x 坐标为 0
-        this.y = 0; // 初始化 y 坐标为 0
+        this.x = 0;
+        this.y = 0;
     }
 
     /**
