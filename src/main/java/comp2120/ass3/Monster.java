@@ -60,12 +60,12 @@ public class Monster implements IMonster {
         return criticalChance;
     }
 
-    public void setMonsterX(int monsterX) {
-        this.monsterX = monsterX;
+    public void setMonsterX(int x) {
+        this.monsterX = x;
     }
 
-    public void setMonsterY(int monsterY) {
-        this.monsterY = monsterY;
+    public void setMonsterY(int y) {
+        this.monsterY = y;
     }
 
     @Override

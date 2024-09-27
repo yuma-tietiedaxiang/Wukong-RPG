@@ -5,16 +5,16 @@ import java.util.*;
 public class Game {
     private Scanner scanner;
     private Player player;
-    private int wave = 1; // Current wave
+    private int wave = 1; // 当前波次
     private Random random;
-    private boolean slept = false; // Flags whether the player has rested
+    private boolean slept = false; // 标记玩家是否已经休息
 
     private GameEngine gameEngine;
 
-    // Map attributes
+    // 地图属性
     private char[][] map;
-    private int playerX;
-    private int playerY;
+    public static int playerX;
+    public static int playerY;
 
     public Game() {
         scanner = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class Game {
     public void startGame() {
         System.out.println("Welcome to the game!");
         System.out.println("Your keyboard should now be set to English.");
-        System.out.println("Press 'Enter' to continue...");
+        System.out.println("Press 'Enter' to continue...'");
         scanner.nextLine();
         chooseProfession();
         initializeMap();
@@ -38,7 +38,7 @@ public class Game {
     }
 
     /**
-     * Allow the user to choose a profession in the beginning
+     * 允许玩家选择职业
      */
     private void chooseProfession() {
         System.out.println("Please choose your profession: ");
@@ -47,7 +47,7 @@ public class Game {
         System.out.println("3. Sandy");
         System.out.println("4. Tang Monk");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); // 消除换行符
         switch (choice) {
             case 1:
                 player = new Player("Monkey King", 200, 155, 30, 16, 20, 15);
@@ -70,17 +70,16 @@ public class Game {
     }
 
     /**
-     * Initialize the game map. Including map size, location of player, location of special places
+     * 初始化地图
      */
     private void initializeMap() {
-        map = gameEngine.getMap(); // Get the map from GameEngine
-        playerX = gameEngine.getPlayerX(); // Get player's starting X position
-        playerY = gameEngine.getPlayerY(); // Get player's starting Y position
+        map = gameEngine.getMap(); // 从 GameEngine 获取地图
+        playerX = gameEngine.getPlayerX(); // 获取玩家的起始 X 位置
+        playerY = gameEngine.getPlayerY(); // 获取玩家的起始 Y 位置
     }
 
     /**
-     * The main game loop that continuously runs while the game is active.
-     * It handles user input for movement, inventory management, status display, and quitting the game.
+     * 游戏主循环
      */
     private void gameLoop() {
         boolean isRunning = true;
@@ -106,59 +105,59 @@ public class Game {
     }
 
     /**
-     * Displays the current state of the game map and player status.
+     * 显示地图
      */
     private void displayMap() {
-        // Clear the screen
+        // 清屏
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        // Display the map
+        // 显示地图
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 if (i == playerY && j == playerX) {
-                    System.out.print("Y"); // Display player as 'Y'
+                    System.out.print("Y"); // 显示玩家为 'Y'
                 } else {
-                    System.out.print(map[i][j]); // Display the map character
+                    System.out.print(map[i][j]); // 显示地图字符
                 }
             }
             System.out.println();
         }
 
-        // Display location keys
+        // 显示位置键
         System.out.println("H:home, W:weapon shop, A:armor shop, P:pet shop, C:clinic, G:village gate");
 
-        // Show current player status
+        // 显示当前玩家状态
         System.out.println("Current health points: " + player.getHealth() + "/" + player.getMaxHealth());
         System.out.println("Current stamina: " + player.getStamina() + "/" + player.getMaxStamina());
         System.out.println("Gems: " + player.getGold());
     }
 
     /**
-     * Moves the player in the specified direction if the movement is valid.
+     * 移动玩家
      */
     private void movePlayer(String direction) {
         int newX = playerX;
         int newY = playerY;
         switch (direction) {
             case "W":
-                newY--; // Move up
+                newY--; // 上
                 break;
             case "A":
-                newX--; // Move left
+                newX--; // 左
                 break;
             case "S":
-                newY++; // Move down
+                newY++; // 下
                 break;
             case "D":
-                newX++; // Move right
+                newX++; // 右
                 break;
         }
 
-        // Check for boundaries and walls
+        // 检查边界和墙壁
         if (newX >= 0 && newX < map[0].length && newY >= 0 && newY < map.length) {
             if (map[newY][newX] != '■') {
-                // Update player's position if valid
+                // 更新玩家位置
                 playerX = newX;
                 playerY = newY;
             } else {
@@ -170,37 +169,37 @@ public class Game {
     }
 
     /**
-     * Handles interactions based on the player's current position on the map.
+     * 处理当前位置的交互
      */
     private void handlePosition() {
         char location = map[playerY][playerX];
         switch (location) {
-            case 'H': // Home
+            case 'H': // 家
                 restAtHome();
                 break;
-            case 'W': // Weapon shop
+            case 'W': // 武器店
                 weaponShop();
                 break;
-            case 'A': // Armor shop
+            case 'A': // 盔甲店
                 armorShop();
                 break;
-            case 'P': // Pet shop
+            case 'P': // 宠物店
                 petShop();
                 break;
-            case 'C': // Clinic
+            case 'C': // 医院
                 hospital();
                 break;
-            case 'G': // Village gate
+            case 'G': // 村庄门
                 battleField();
                 break;
             default:
-                // Do nothing for other locations
+                // 其他位置不处理
                 break;
         }
     }
 
     /**
-     * Handles resting at home to recover health and stamina points.
+     * 在家休息
      */
     private void restAtHome() {
         if (!slept) {
@@ -217,7 +216,7 @@ public class Game {
     }
 
     /**
-     * Manages interactions within the weapon shop.
+     * 武器店
      */
     private void weaponShop() {
         System.out.println("You arrive at the weapon shop.");
@@ -239,7 +238,7 @@ public class Game {
             System.out.println("0. Leave the shop");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // 消除换行符
             if (choice == 0) {
                 inShop = false;
             } else if (choice > 0 && choice <= weapons.size()) {
@@ -259,7 +258,7 @@ public class Game {
     }
 
     /**
-     * Manages interactions within the armor shop.
+     * 盔甲店
      */
     private void armorShop() {
         System.out.println("You arrive at the armor shop.");
@@ -280,7 +279,7 @@ public class Game {
             }
             System.out.println("0. Leave the shop");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // 消除换行符
             if (choice == 0) {
                 inShop = false;
             } else if (choice > 0 && choice <= armors.size()) {
@@ -300,7 +299,7 @@ public class Game {
     }
 
     /**
-     * Displays a message indicating that the pet shop is currently unavailable.
+     * 宠物店
      */
     private void petShop() {
         System.out.println("You arrive at the pet shop.");
@@ -310,7 +309,7 @@ public class Game {
     }
 
     /**
-     * Manages interactions at the hospital, allowing the player to heal or recover stamina.
+     * 医院
      */
     private void hospital() {
         System.out.println("You have arrived at the clinic.");
@@ -320,7 +319,7 @@ public class Game {
         System.out.println("0. Leave the clinic");
 
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); // 消除换行符
         switch (choice) {
             case 1:
                 if (player.spendGold(20)) {
@@ -357,84 +356,81 @@ public class Game {
     }
 
     /**
-     * Simulates the battlefield scene where the player can move around, encounter monsters, and battle them.
+     * 战场
      */
     private void battleField() {
         System.out.println("You have left the village and entered the battlefield.");
 
-        // Initialize the battlefield map
+        // 初始化战场地图
         char[][] battlefield = new char[15][20];
 
-        // Fill the battlefield map with spaces
+        // 填充战场地图
         for (int i = 0; i < battlefield.length; i++) {
             Arrays.fill(battlefield[i], ' ');
         }
 
-        // Set the boundary (walls)
+        // 设置边界
         for (int i = 0; i < battlefield.length; i++) {
-            battlefield[i][0] = '■'; // Left wall
-            battlefield[i][battlefield[0].length - 1] = '■'; // Right wall
+            battlefield[i][0] = '■'; // 左墙
+            battlefield[i][battlefield[0].length - 1] = '■'; // 右墙
         }
         for (int j = 0; j < battlefield[0].length; j++) {
-            battlefield[0][j] = '■'; // Top wall
-            battlefield[battlefield.length - 1][j] = '■'; // Bottom wall
+            battlefield[0][j] = '■'; // 上墙
+            battlefield[battlefield.length - 1][j] = '■'; // 下墙
         }
 
-        // Set the gate for returning to the village
-        battlefield[7][0] = 'G'; // Village entrance
+        // 设置返回村庄的门
+        battlefield[7][0] = 'G'; // 村庄入口
 
-        // Set the player's initial position
-        int battlePlayerX = battlefield[0].length - 2; // Column position
-        int battlePlayerY = 7; // Row position
+        // 设置玩家的初始位置
+        int battlePlayerX = battlefield[0].length - 2; // 列位置
+        int battlePlayerY = 7; // 行位置
 
-        // Place monsters on the battlefield using GameEngine
+        // 初始化怪物并设置它们的位置
         List<Monster> monsters = gameEngine.initializeMonsters();
-        List<int[]> monsterPositions = new ArrayList<>();
         for (Monster monster : monsters) {
             int monsterX = monster.getX();
             int monsterY = monster.getY();
             battlefield[monsterY][monsterX] = 'M';
-            monsterPositions.add(new int[]{monsterX, monsterY});
         }
 
-        // Player stays in the battlefield until they decide to leave
+        // 玩家在战场中行动
         boolean inBattlefield = true;
         while (inBattlefield) {
-            displayBattlefieldMap(battlefield, battlePlayerX, battlePlayerY); // Display battlefield map
+            displayBattlefieldMap(battlefield, battlePlayerX, battlePlayerY); // 显示战场地图
 
-            // Prompt the player to enter a command for movement or exit
+            // 提示玩家输入移动或退出指令
             System.out.println("Please enter a command (WASD to move, Q to leave the battlefield)");
             String input = scanner.nextLine().toUpperCase();
             if (input.equals("Q")) {
-                inBattlefield = false; // Exit the battlefield
+                inBattlefield = false; // 退出战场
                 System.out.println("You have returned to the village.");
             } else if (input.equals("W") || input.equals("A") || input.equals("S") || input.equals("D")) {
-                // Move the player based on input
+                // 移动玩家
                 int newX = battlePlayerX;
                 int newY = battlePlayerY;
                 switch (input) {
                     case "W":
                         newY--;
-                        break; // Move up
+                        break; // 上
                     case "A":
                         newX--;
-                        break; // Move left
+                        break; // 左
                     case "S":
                         newY++;
-                        break; // Move down
+                        break; // 下
                     case "D":
                         newX++;
-                        break; // Move right
+                        break; // 右
                 }
-                // Check if the movement is within the battlefield boundary
+                // 检查移动是否有效
                 if (newX >= 0 && newX < battlefield[0].length && newY >= 0 && newY < battlefield.length) {
-                    if (battlefield[newY][newX] != '■') { // Check if the player hits a wall
+                    if (battlefield[newY][newX] != '■') {
                         battlePlayerX = newX;
                         battlePlayerY = newY;
 
-                        // Check what the player encounters at the new position
-                        if (battlefield[newY][newX] == 'M') { // Encounter a monster
-                            // Start the battle with the monster
+                        // 检查玩家当前位置
+                        if (battlefield[newY][newX] == 'M') { // 遇到怪物
                             System.out.println("You encountered a monster!");
                             Monster monster = null;
                             Iterator<Monster> iterator = monsters.iterator();
@@ -450,144 +446,128 @@ public class Game {
                                 battle(monster);
                             }
 
-                            // Remove the monster from the battlefield after defeat
+                            // 移除怪物
                             battlefield[newY][newX] = ' ';
-                            int finalNewX = newX;
-                            int finalNewY = newY;
-                            // Remove the monster position from the list
-                            monsterPositions.removeIf(pos -> pos[0] == finalNewX && pos[1] == finalNewY);
-                            // Check if all monsters are defeated
-                            if (monsterPositions.isEmpty()) {
+
+                            // 检查是否所有怪物都被击败
+                            if (monsters.isEmpty()) {
                                 System.out.println("You have defeated all the monsters and returned to the village.");
-                                inBattlefield = false; // Return to the village after all monsters are defeated
+                                inBattlefield = false; // 返回村庄
                             }
                         } else if (battlefield[newY][newX] == 'G') {
-                            // Player returns to the village
+                            // 玩家返回村庄
                             System.out.println("You have returned to the village.");
                             inBattlefield = false;
                         }
 
-                        // Move the monsters after the player moves
-                        moveMonsters(battlefield, monsterPositions, battlePlayerX, battlePlayerY);
+                        // 移动怪物
+                        moveMonsters(battlefield, monsters, battlePlayerX, battlePlayerY);
                     } else {
-                        System.out.println("Bumped into a wall, cannot move!"); // Hit a wall
+                        System.out.println("Bumped into a wall, cannot move!");
                     }
                 } else {
-                    System.out.println("Cannot move there!"); // Out of bounds
+                    System.out.println("Cannot move there!");
                 }
             } else {
-                System.out.println("Invalid input, please re-enter."); // Handle invalid commands
+                System.out.println("Invalid input, please re-enter.");
             }
 
-            // Check if the player's health has dropped to zero
+            // 检查玩家是否被击败
             if (player.getHealth() <= 0) {
                 System.out.println("You were defeated, game over.");
                 System.exit(0);
             }
         }
-        slept = false; // Player can rest again after the battle is over
+        slept = false; // 玩家可以再次休息
     }
 
     /**
-     * Displays the battlefield map with the player's current position.
+     * 显示战场地图
      */
     private void displayBattlefieldMap(char[][] battlefield, int battlePlayerX, int battlePlayerY) {
-        // Clear the screen
+        // 清屏
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        // Display the battlefield with the player's position
+        // 显示战场地图
         for (int i = 0; i < battlefield.length; i++) {
             for (int j = 0; j < battlefield[0].length; j++) {
                 if (i == battlePlayerY && j == battlePlayerX) {
-                    System.out.print("Y"); // Represents the player
+                    System.out.print("Y"); // 玩家
                 } else {
-                    System.out.print(battlefield[i][j]); // Display other battlefield elements
+                    System.out.print(battlefield[i][j]); // 其他元素
                 }
             }
             System.out.println();
         }
-        // Display player's status (health, stamina, and gold)
+        // 显示玩家状态
         System.out.println("Current health points: " + player.getHealth() + "/" + player.getMaxHealth());
         System.out.println("Current stamina: " + player.getStamina() + "/" + player.getMaxStamina());
         System.out.println("Gems: " + player.getGold());
     }
 
     /**
-     * Moves the monsters randomly on the battlefield and checks if any monster encounters the player.
+     * 移动怪物
      */
-    private void moveMonsters(char[][] battlefield, List<int[]> monsterPositions, int playerX, int playerY) {
-        // Move each monster
-        Iterator<int[]> iterator = monsterPositions.iterator();
+    private void moveMonsters(char[][] battlefield, List<Monster> monsters, int playerX, int playerY) {
+        Iterator<Monster> iterator = monsters.iterator();
         while (iterator.hasNext()) {
-            int[] pos = iterator.next();
-            int x = pos[0];
-            int y = pos[1];
+            Monster monster = iterator.next();
+            int x = monster.getX();
+            int y = monster.getY();
 
-            // Clear the old position
+            // 清除旧位置
             battlefield[y][x] = ' ';
 
-            // Randomly move the monster
+            // 随机移动怪物
             int newX = x;
             int newY = y;
             int dir = random.nextInt(4);
             switch (dir) {
                 case 0:
                     newY--;
-                    break; // Move up
+                    break; // 上
                 case 1:
                     newY++;
-                    break; // Move down
+                    break; // 下
                 case 2:
                     newX--;
-                    break; // Move left
+                    break; // 左
                 case 3:
                     newX++;
-                    break; // Move right
+                    break; // 右
             }
 
-            // Check if the new position is within the boundaries and is empty
+            // 检查新位置是否有效
             if (newX >= 1 && newX < battlefield[0].length - 1 && newY >= 1 && newY < battlefield.length - 1 && battlefield[newY][newX] == ' ') {
-                pos[0] = newX;
-                pos[1] = newY;
+                monster.setMonsterX(newX);
+                monster.setMonsterY(newY);
             }
 
-            // Place the monster at the new position
-            battlefield[pos[1]][pos[0]] = 'M'; // Represents the monster
+            // 放置怪物在新位置
+            x = monster.getX();
+            y = monster.getY();
+            battlefield[y][x] = 'M';
 
-            // Check if the monster encounters the player
-            if (pos[0] == playerX && pos[1] == playerY) {
-                // Monster encounters the player, start a battle
+            // 检查怪物是否遇到玩家
+            if (x == playerX && y == playerY) {
                 System.out.println("A monster has encountered you!");
-                Monster monster = null;
-                Iterator<Monster> monsterIterator = gameEngine.getCurrentMonsters().iterator();
-                while (monsterIterator.hasNext()) {
-                    Monster m = monsterIterator.next();
-                    if (m.getX() == pos[0] && m.getY() == pos[1]) {
-                        monster = m;
-                        monsterIterator.remove();
-                        break;
-                    }
-                }
-                if (monster != null) {
-                    battle(monster);
-                }
+                battle(monster);
 
-                // Remove the monster after it is defeated
-                battlefield[pos[1]][pos[0]] = ' ';
-                iterator.remove(); // Exit the loop to avoid modifying the list during iteration
+                // 移除怪物
+                battlefield[y][x] = ' ';
+                iterator.remove();
                 break;
             }
         }
     }
 
     /**
-     * Generates a new monster with attributes based on the current wave of battles.
+     * 生成怪物
      */
     private Monster generateMonster(String name) {
         Monster monster = gameEngine.generateMonster(name);
         if (monster == null) {
-            // Handle the case where the monster is not found in the configuration
             System.out.println("Monster not found in configuration. Using default values.");
             monster = new Monster("Default Monster", 100, 10, 5, 5, 5, 20);
         }
@@ -595,15 +575,15 @@ public class Game {
     }
 
     /**
-     * Simulates a battle between the player and a monster.
+     * 战斗逻辑
      */
     private void battle(Monster monster) {
         System.out.println("You encountered a " + monster.getName() + "!");
         boolean inBattle = true;
 
-        // Loop until the battle ends
+        // 循环直到战斗结束
         while (inBattle) {
-            // Player's action choices
+            // 玩家动作选择
             System.out.println("\nPlease choose your action:");
             System.out.println("1. Light Attack (Damage +25, consumes 2 stamina)");
             System.out.println("2. Normal Attack (Damage +80, consumes 8 stamina)");
@@ -611,11 +591,11 @@ public class Game {
             System.out.println("4. Escape (Consumes 10 stamina)");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // 消除换行符
 
             switch (choice) {
                 case 1:
-                    // Light Attack
+                    // 轻攻击
                     if (player.getStamina() >= 2) {
                         player.reduceStamina(2);
                         attackMonster(monster, 25);
@@ -632,7 +612,7 @@ public class Game {
                     }
                     break;
                 case 2:
-                    // Normal Attack
+                    // 普通攻击
                     if (player.getStamina() >= 8) {
                         player.reduceStamina(8);
                         attackMonster(monster, 80);
@@ -649,7 +629,7 @@ public class Game {
                     }
                     break;
                 case 3:
-                    // Heavy Attack
+                    // 重攻击
                     if (player.getStamina() >= 20) {
                         player.reduceStamina(20);
                         attackMonster(monster, 160);
@@ -666,7 +646,7 @@ public class Game {
                     }
                     break;
                 case 4:
-                    // Attempt to escape the battle
+                    // 逃跑
                     if (player.getStamina() >= 10) {
                         player.reduceStamina(10);
                         System.out.println("You successfully escaped!");
@@ -680,7 +660,7 @@ public class Game {
                     break;
             }
 
-            // Check if the player was defeated
+            // 检查玩家是否被击败
             if (player.getHealth() <= 0) {
                 System.out.println("You were defeated, game over.");
                 System.exit(0);
@@ -689,7 +669,7 @@ public class Game {
     }
 
     /**
-     * Calculates and executes an attack on the monster.
+     * 攻击怪物
      */
     private void attackMonster(Monster monster, int extraDamage) {
         int totalDamage = player.attack() + extraDamage - monster.getDefense();
@@ -710,7 +690,7 @@ public class Game {
     }
 
     /**
-     * Executes the monster's attack on the player.
+     * 怪物攻击
      */
     private void monsterAttack(Monster monster) {
         int totalDamage = monster.attack() - player.getDefense();
@@ -732,7 +712,7 @@ public class Game {
     }
 
     /**
-     * Displays the player's current status.
+     * 显示玩家状态
      */
     private void showStatus() {
         System.out.println("\nStatus:");
@@ -749,7 +729,7 @@ public class Game {
     }
 
     /**
-     * Manages the player's inventory, allowing them to equip weapons or armor.
+     * 管理库存
      */
     private void manageInventory() {
         Inventory inventory = player.getInventory();
@@ -762,7 +742,7 @@ public class Game {
             System.out.println("0. Return");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); // 消除换行符
             switch (choice) {
                 case 1:
                     equipWeapon();
@@ -781,7 +761,7 @@ public class Game {
     }
 
     /**
-     * Allows the player to select and equip a weapon from the inventory.
+     * 装备武器
      */
     private void equipWeapon() {
         Inventory inventory = player.getInventory();
@@ -803,7 +783,7 @@ public class Game {
             index++;
         }
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); // 消除换行符
         if (choice > 0 && choice <= weapons.size()) {
             Weapon selectedWeapon = weapons.get(choice - 1);
             inventory.equipWeapon(selectedWeapon);
@@ -814,7 +794,7 @@ public class Game {
     }
 
     /**
-     * Allows the player to select and equip armor from the inventory.
+     * 装备盔甲
      */
     private void equipArmor() {
         Inventory inventory = player.getInventory();
@@ -836,7 +816,7 @@ public class Game {
             index++;
         }
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); // 消除换行符
         if (choice > 0 && choice <= armors.size()) {
             Armor selectedArmor = armors.get(choice - 1);
             inventory.equipArmor(selectedArmor);
