@@ -39,9 +39,10 @@ public class Game {
 
     /**
      * 允许玩家选择职业
+     *
      */
     private void chooseProfession() {
-        System.out.println("Please choose your profession: ");
+        System.out.println("Please choose your role: ");
         System.out.println("1. Monkey King");
         System.out.println("2. Pigsy");
         System.out.println("3. Sandy");
@@ -125,7 +126,7 @@ public class Game {
         }
 
         // 显示位置键
-        System.out.println("H:home, W:weapon shop, A:armor shop, P:pet shop, C:clinic, G:village gate");
+        System.out.println("A: Armor Shop, C: Clinic, G: Gate Between Village & Battlefield, H: Home, P: Pet Shop, W: Weapon Shop, Y: You");
 
         // 显示当前玩家状态
         System.out.println("Current health points: " + player.getHealth() + "/" + player.getMaxHealth());
@@ -400,6 +401,7 @@ public class Game {
             displayBattlefieldMap(battlefield, battlePlayerX, battlePlayerY); // 显示战场地图
 
             // 提示玩家输入移动或退出指令
+            System.out.println("G: Gate Between Village & Battlefield, M: Monster, Y: You");
             System.out.println("Please enter a command (WASD to move, Q to leave the battlefield)");
             String input = scanner.nextLine().toUpperCase();
             if (input.equals("Q")) {
@@ -716,7 +718,7 @@ public class Game {
      */
     private void showStatus() {
         System.out.println("\nStatus:");
-        System.out.println("Profession: " + player.getName());
+        System.out.println("Role: " + player.getName());
         System.out.println("Health points: " + player.getHealth() + "/" + player.getMaxHealth());
         System.out.println("Stamina: " + player.getStamina() + "/" + player.getMaxStamina());
         System.out.println("Damage: " + player.getDamage());
