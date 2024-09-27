@@ -14,7 +14,7 @@ import java.util.*;
  * This class serves as the core engine of the game, providing functionality for setting up and controlling
  * the game environment.
  *
- * @author Jun
+ * @author Jun Zhu
  */
 public class GameEngine {
     private Map<String, MonsterConfig> monsterConfigs; // Stores monster configurations
