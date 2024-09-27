@@ -453,8 +453,27 @@ public class Game {
         int battlePlayerX = 2; // Player's starting X coordinate
         int battlePlayerY = 7; // Player's starting Y coordinate
 
+        // Generate a random number of monsters between 1 and 4
+        int numMonsters = random.nextInt(4) + 1; // random.nextInt(4) generates 0 to 3, so add 1
+
         // Initialize monsters and assign random positions
-        List<Monster> monsters = gameEngine.initializeMonsters();
+        List<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < numMonsters; i++) {
+            // Randomly select a monster type from available configurations
+            List<String> monsterNames = new ArrayList<>(gameEngine.getMonsterConfigs().keySet());
+            String randomMonsterName = monsterNames.get(random.nextInt(monsterNames.size()));
+
+            Monster monster = gameEngine.generateMonster(randomMonsterName);
+            if (monster != null) {
+                monsters.add(monster);
+            } else {
+                // If the monster configuration is not found, create a default monster
+                monster = new Monster("Default Monster", 100, 10, 5, 5, 5, 20);
+                monsters.add(monster);
+            }
+        }
+
+        // Assign random positions to each monster
         for (Monster monster : monsters) {
             int x, y;
             do {

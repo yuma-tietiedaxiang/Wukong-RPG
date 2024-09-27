@@ -133,6 +133,11 @@ public class GameEngine {
         return currentMonsters;
     }
 
+    public Map<String, MonsterConfig> getMonsterConfigs() {
+        return monsterConfigs;
+    }
+
+
     /**
      * Generates a Monster object based on the specified monster name. If the monster's configuration is not found,
      * this method returns null.
