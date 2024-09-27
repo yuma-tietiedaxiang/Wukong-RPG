@@ -56,6 +56,9 @@ public class Player implements IPlayer {
     // The amount of gold (gems) the player has, used as in-game currency.
     private int gold;
 
+    private int x;
+    private int y;
+
     /**
      * Constructs a Player object with the specified attributes.
      *
@@ -79,6 +82,8 @@ public class Player implements IPlayer {
         this.dodgeChance = dodgeChance;
         this.inventory = new Inventory();
         this.gold = 200; // Initial amount of gold (gems) for the player.
+        this.x = 0; // 初始化 x 坐标为 0
+        this.y = 0; // 初始化 y 坐标为 0
     }
 
     /**
@@ -275,7 +280,7 @@ public class Player implements IPlayer {
      */
     @Override
     public int getX() {
-        return 0; // Not used in this context
+        return x; // Not used in this context
     }
 
     /**
@@ -285,7 +290,7 @@ public class Player implements IPlayer {
      */
     @Override
     public int getY() {
-        return 0; // Not used in this context
+        return y; // Not used in this context
     }
 
     /**
@@ -297,7 +302,8 @@ public class Player implements IPlayer {
      */
     @Override
     public void move(int offsetX, int offsetY) {
-        // Not used in this context
+        this.x += offsetX;
+        this.y += offsetY;
     }
 
     /**
