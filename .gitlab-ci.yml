@@ -1,0 +1,27 @@
+image: maven:3.8-openjdk-17
+
+stages:
+  - build
+  - test
+
+build-job:
+  stage: build
+  tags:
+    - comp2300
+    - comp2100
+    - comp2120
+  artifacts:
+    when: always
+    paths:
+      - target/*.jar
+  script:
+    - mvn clean package
+
+test-job:
+  stage: test
+  tags:
+    - comp2300
+    - comp2100
+    - comp2120
+  script:
+    - mvn test
