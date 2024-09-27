@@ -43,6 +43,11 @@
                   <source>17</source>
                   <target>17</target>
                   <encoding>UTF-8</encoding>
+                  <archive>
+                    <manifest>
+                      <mainClass>comp2120.ass3.RPGGame</mainClass>
+                    </manifest>
+                  </archive>
               </configuration>
           </plugin>
       </plugins>
