@@ -20,7 +20,7 @@ package comp2120.ass3;
  * @see Inventory
  * @see Player
  *
- * Author: Jun Zhu
+ * @author Jun Zhu
  */
 public class Item {
     // The name of the item.
