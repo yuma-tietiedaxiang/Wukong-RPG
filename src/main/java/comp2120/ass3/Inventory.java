@@ -1,4 +1,5 @@
 package comp2120.ass3;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,6 @@ public class Inventory {
 
     /**
      * Displays the player's current inventory of items, including equipped weapon and armor.
-     * @auther Yingxuan Tang
      */
     public void showInventory() {
         if (items.isEmpty()) {
@@ -35,32 +35,20 @@ public class Inventory {
 
     /**
      * Equips the specified weapon.
-     *
-     * @param weapon The weapon to be equipped.
-     * @author Yingxuan Tang
      */
     public void equipWeapon(Weapon weapon) {
         equippedWeapon = weapon;
     }
 
-
-
     /**
      * Equips the specified armor.
-     *
-     * @param armor The armor to be equipped.
-     * @author Yingxuan Tang
      */
     public void equipArmor(Armor armor) {
         equippedArmor = armor;
     }
 
-
     /**
      * Adds an item to the inventory.
-     *
-     * @param item The item to be added.
-     * @author Yingxuan Tang
      */
     public void addItem(Item item) {
         items.add(item);
@@ -68,18 +56,16 @@ public class Inventory {
 
     /**
      * Returns the list of items in the inventory.
-     *
-     * @return A list of items.
-     * @author Yingxuan Tang
      */
     public List<Item> getItems() {
         return items;
     }
 
-    //getter
+    // Getters
     public Weapon getEquippedWeapon() {
         return equippedWeapon;
     }
+
     public Armor getEquippedArmor() {
         return equippedArmor;
     }

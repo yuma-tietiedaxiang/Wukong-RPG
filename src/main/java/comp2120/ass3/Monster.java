@@ -1,6 +1,6 @@
 package comp2120.ass3;
 
-public class Monster implements IMonster{
+public class Monster implements IMonster {
     private String name;
     private int health;
     private int damage;
@@ -22,36 +22,50 @@ public class Monster implements IMonster{
     }
 
     /**
-     * Returns the monstor's base attack damage.
-     *
-     * @return The player's base attack damage
-     * @author Yu Ma
+     * Returns the monster's base attack damage.
      */
     public int attack() {
-        // Return the player's base damage
         return this.damage;
     }
 
-    @Override
-    public int getDamage() {
-        return 0;
-    }
-
-
     /**
-     * Reduces the monstor's health by a specified amount.     *
-     * @param amount The amount of health to reduce
-     * @author Yu Ma
+     * Reduces the monster's health by a specified amount.
      */
     public void reduceHealth(int amount) {
-        // Subtract the specified amount from the player's current health
         this.health -= amount;
     }
 
-
-    // Getters
+    // Getters and setters
     public String getName() {
         return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getGoldReward() {
+        return goldReward;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getDodgeChance() {
+        return dodgeChance;
+    }
+
+    public int getCriticalChance() {
+        return criticalChance;
+    }
+
+    public void setMonsterX(int monsterX) {
+        this.monsterX = monsterX;
+    }
+
+    public void setMonsterY(int monsterY) {
+        this.monsterY = monsterY;
     }
 
     @Override
@@ -71,30 +85,12 @@ public class Monster implements IMonster{
     }
 
     @Override
-    public int getMaxHealth() {
-        return 0;
+    public int getDamage() {
+        return damage;
     }
 
-    //getter and setter
-    public int getHealth() {
+    @Override
+    public int getMaxHealth() {
         return health;
     }
-    public int getGoldReward() {
-        return goldReward;
-    }
-    public int getDefense() {return defense;}
-    public int getDodgeChance() {
-        return dodgeChance;
-    }
-    public int getCriticalChance() {
-        return criticalChance;
-    }
-
-    public void setMonsterX(int monsterX) {
-        this.monsterX = monsterX;
-    }
-    public void setMonsterY(int monsterY) {
-        this.monsterY = monsterY;
-    }
-
 }

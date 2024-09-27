@@ -4,7 +4,6 @@ public class RPGGame {
 
     /**
      * Start a new game
-     * @author Yu Ma
      */
     public static void main(String[] args) {
         Game game = new Game();

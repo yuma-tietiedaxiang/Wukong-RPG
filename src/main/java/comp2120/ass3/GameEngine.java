@@ -10,36 +10,33 @@ import java.util.*;
 /**
  * The GameEngine class is responsible for handling the game's mechanics such as loading configurations,
  * initializing the map, moving the player, and managing monsters.
- *
- * @author Yu Ma
  */
 public class GameEngine {
     private Map<String, MonsterConfig> monsterConfigs; // Monster configurations
+    private List<LevelConfig> levels; // List of levels
     private LevelConfig currentLevelConfig; // Current level configuration
     private char[][] map;
     private int playerX;
     private int playerY;
+    private List<Monster> currentMonsters = new ArrayList<>();
 
     /**
      * Constructs a GameEngine and loads the map and monster configurations.
-     *
-     * @param mapConfigFile The file path to the map configuration file
-     * @param monsterConfigFile The file path to the monster configuration file
      */
-    public GameEngine(String mapConfigFile, String monsterConfigFile) {
+    public GameEngine(String mapConfigFile, String monsterConfigFile, String levelConfigFile) {
         loadMonsterConfig(monsterConfigFile);  // Load monster configurations
         loadMapConfig(mapConfigFile);          // Load map configurations
+        loadLevelConfig(levelConfigFile);      // Load level configurations
     }
 
     /**
      * Loads monster configurations from the specified file.
-     *
-     * @param monsterConfigFile The file path to the monster configuration file
      */
     private void loadMonsterConfig(String monsterConfigFile) {
         try {
             Gson gson = new Gson();
-            monsterConfigs = gson.fromJson(new FileReader(monsterConfigFile), new TypeToken<Map<String, MonsterConfig>>(){}.getType());
+            monsterConfigs = gson.fromJson(new FileReader(monsterConfigFile), new TypeToken<Map<String, MonsterConfig>>() {
+            }.getType());
         } catch (IOException e) {
             System.out.println("Failed to load monster configuration file.");
             e.printStackTrace();
@@ -48,8 +45,6 @@ public class GameEngine {
 
     /**
      * Loads map configurations from the specified file.
-     *
-     * @param mapConfigFile The file path to the map configuration file
      */
     private void loadMapConfig(String mapConfigFile) {
         try {
@@ -64,8 +59,6 @@ public class GameEngine {
 
     /**
      * Initializes the map using the given MapConfig object.
-     *
-     * @param mapConfig The map configuration object
      */
     private void initializeMap(MapConfig mapConfig) {
         int width = mapConfig.getWidth();
@@ -74,9 +67,7 @@ public class GameEngine {
 
         // Initialize the map layout
         for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                map[i][j] = mapConfig.getLayout()[i][j];
-            }
+            System.arraycopy(mapConfig.getLayout()[i], 0, map[i], 0, width);
         }
 
         // Set player's starting position
@@ -85,27 +76,43 @@ public class GameEngine {
     }
 
     /**
-     * Displays the current map, including the player's position.
+     * Loads level configurations from the specified file.
      */
-    public void displayMap() {
-        // Iterate through the map and print each cell
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                if (i == playerY && j == playerX) {
-                    System.out.print("Y"); // Representing the player
-                } else {
-                    System.out.print(map[i][j]);
-                }
+    public void loadLevelConfig(String levelConfigFile) {
+        try {
+            Gson gson = new Gson();
+            LevelData levelData = gson.fromJson(new FileReader(levelConfigFile), LevelData.class);
+            levels = levelData.getLevels();
+            // For simplicity, we'll use the first level
+            if (levels != null && !levels.isEmpty()) {
+                currentLevelConfig = levels.get(0);
             }
-            System.out.println();
+        } catch (IOException e) {
+            System.out.println("Failed to load level configuration.");
+            e.printStackTrace();
         }
     }
 
     /**
+     * Initializes monsters for the current level based on the configuration.
+     */
+    public List<Monster> initializeMonsters() {
+        currentMonsters.clear();
+        if (currentLevelConfig != null) {
+            for (MonsterLevelConfig mlc : currentLevelConfig.getMonsters()) {
+                Monster monster = generateMonster(mlc.getName());
+                if (monster != null) {
+                    monster.setMonsterX(mlc.getPosition().get("x"));
+                    monster.setMonsterY(mlc.getPosition().get("y"));
+                    currentMonsters.add(monster);
+                }
+            }
+        }
+        return currentMonsters;
+    }
+
+    /**
      * Generates a Monster object based on the given monster name.
-     *
-     * @param name The name of the monster to generate
-     * @return The generated Monster object, or null if the monster configuration is not found
      */
     public Monster generateMonster(String name) {
         MonsterConfig config = monsterConfigs.get(name);
@@ -125,89 +132,26 @@ public class GameEngine {
         }
     }
 
-    /**
-     * Loads a level configuration from the specified file.
-     *
-     * @param levelConfigFile The file path to the level configuration file
-     */
-    public void loadLevelConfig(String levelConfigFile) {
-        try {
-            Gson gson = new Gson();
-            currentLevelConfig = gson.fromJson(new FileReader(levelConfigFile), LevelConfig.class);
-        } catch (IOException e) {
-            System.out.println("Failed to load level configuration.");
-            e.printStackTrace();
-        }
+    // Getter methods
+    public char[][] getMap() {
+        return this.map;
     }
 
-    /**
-     * Initializes monsters for the current level based on the configuration.
-     *
-     * @return A list of initialized monsters
-     */
-    public List<Monster> initializeMonsters() {
-        List<Monster> monsters = new ArrayList<>();
-        for (MonsterLevelConfig mlc : currentLevelConfig.getMonsters()) {
-            Monster monster = generateMonster(mlc.getName());
-            monsters.add(monster);
-            map[mlc.getInitialPosition().get("y")][mlc.getInitialPosition().get("x")] = 'M'; // Place monster on the map
-        }
-        return monsters;
+    public int getPlayerX() {
+        return this.playerX;
     }
 
-    /**
-     * Moves the player on the map based on the specified direction.
-     * Valid directions are W (up), A (left), S (down), D (right).
-     *
-     * @param direction The direction in which to move the player
-     */
-    public void movePlayer(String direction) {
-        int newX = playerX;
-        int newY = playerY;
-
-        // Move the player based on the direction
-        switch (direction.toUpperCase()) {
-            case "W":
-                newY--;
-                break;
-            case "A":
-                newX--;
-                break;
-            case "S":
-                newY++;
-                break;
-            case "D":
-                newX++;
-                break;
-        }
-
-        // Check if the new position is within bounds and is empty
-        if (newX >= 0 && newX < map[0].length && newY >= 0 && newY < map.length && map[newY][newX] == ' ') {
-            playerX = newX;
-            playerY = newY;
-        } else {
-            System.out.println("Cannot move there.");
-        }
+    public int getPlayerY() {
+        return this.playerY;
     }
 
-    /**
-     * Moves the monsters on the map. This method should handle random monster movement
-     * and interaction with the player if they encounter each other.
-     *
-     * @param monsters A list of monsters currently on the map
-     * @param monsterPositions The positions of the monsters
-     * @param playerX The player's X-coordinate
-     * @param playerY The player's Y-coordinate
-     */
-    public void moveMonsters(List<Monster> monsters, List<int[]> monsterPositions, int playerX, int playerY) {
-        // Copy the existing logic for moving monsters randomly
+    public List<Monster> getCurrentMonsters() {
+        return currentMonsters;
     }
 }
 
 /**
  * A configuration class representing the map's structure and initial settings.
- *
- * @author Yu Ma
  */
 class MapConfig {
     private int width;
@@ -234,8 +178,6 @@ class MapConfig {
 
 /**
  * A configuration class representing a monster's attributes.
- *
- * @author Yu Ma
  */
 class MonsterConfig {
     private String name;
@@ -247,19 +189,53 @@ class MonsterConfig {
     private int goldReward;
 
     // Getters
-    public String getName() { return name; }
-    public int getHealth() { return health; }
-    public int getDamage() { return damage; }
-    public int getDefense() { return defense; }
-    public int getCriticalChance() { return criticalChance; }
-    public int getDodgeChance() { return dodgeChance; }
-    public int getGoldReward() { return goldReward; }
+    public String getName() {
+        return name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getCriticalChance() {
+        return criticalChance;
+    }
+
+    public int getDodgeChance() {
+        return dodgeChance;
+    }
+
+    public int getGoldReward() {
+        return goldReward;
+    }
+}
+
+/**
+ * A class representing a monster's configuration within a specific level, including its starting position.
+ */
+class MonsterLevelConfig {
+    private String name;
+    private Map<String, Integer> position;
+
+    public String getName() {
+        return name;
+    }
+
+    public Map<String, Integer> getPosition() {
+        return position;
+    }
 }
 
 /**
  * A configuration class representing the level settings, including monsters and their positions.
- *
- * @author Yu Ma
  */
 class LevelConfig {
     private int levelNumber;
@@ -275,19 +251,12 @@ class LevelConfig {
 }
 
 /**
- * A class representing a monster's configuration within a specific level, including its starting position.
- *
- * @author Yu Ma
+ * A class to hold all level data
  */
-class MonsterLevelConfig {
-    private String name;
-    private Map<String, Integer> initialPosition;
+class LevelData {
+    private List<LevelConfig> levels;
 
-    public String getName() {
-        return name;
-    }
-
-    public Map<String, Integer> getInitialPosition() {
-        return initialPosition;
+    public List<LevelConfig> getLevels() {
+        return levels;
     }
 }
