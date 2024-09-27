@@ -42,28 +42,28 @@ public class Game {
      */
     private void chooseProfession() {
         System.out.println("Please choose your profession: ");
-        System.out.println("1. Archer");
-        System.out.println("2. Warrior");
-        System.out.println("3. Samurai");
-        System.out.println("4. Assassin");
+        System.out.println("1. Monkey King");
+        System.out.println("2. Pigsy");
+        System.out.println("3. Sandy");
+        System.out.println("4. Tang Monk");
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
         switch (choice) {
             case 1:
-                player = new Player("Archer", 200, 155, 30, 16, 20, 15);
+                player = new Player("Monkey King", 200, 155, 30, 16, 20, 15);
                 break;
             case 2:
-                player = new Player("Warrior", 200, 110, 20, 22, 30, 10);
+                player = new Player("Pigsy", 200, 110, 20, 22, 30, 10);
                 break;
             case 3:
-                player = new Player("Samurai", 300, 75, 15, 30, 25, 5);
+                player = new Player("Sandy", 300, 75, 15, 30, 25, 5);
                 break;
             case 4:
-                player = new Player("Assassin", 160, 155, 20, 20, 40, 25);
+                player = new Player("Tang Monk", 160, 155, 20, 20, 40, 25);
                 break;
             default:
-                System.out.println("Invalid selection, defaulting to Archer.");
-                player = new Player("Archer", 200, 155, 30, 16, 20, 15);
+                System.out.println("Invalid selection, defaulting to Monkey King.");
+                player = new Player("Monkey King", 200, 155, 30, 16, 20, 15);
                 break;
         }
         System.out.println("You chose: " + player.getName());
