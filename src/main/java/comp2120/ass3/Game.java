@@ -10,7 +10,7 @@ import java.util.*;
  * elements such as shops, clinics, and the battlefield. It also manages the game's main loop,
  * displaying the game state and processing user inputs.</p>
  *
- * <p>Author: Jun Zhu</p>
+ * @author Jun Zhu
  */
 public class Game {
     /**
