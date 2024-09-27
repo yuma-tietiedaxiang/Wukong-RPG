@@ -126,9 +126,6 @@ public class GameEngine {
             for (MonsterLevelConfig mlc : currentLevelConfig.getMonsters()) {
                 Monster monster = generateMonster(mlc.getName());
                 if (monster != null) {
-                    // Set the initial position of each monster
-                    monster.setMonsterX(mlc.getPosition().get("x"));
-                    monster.setMonsterY(mlc.getPosition().get("y"));
                     currentMonsters.add(monster);
                 }
             }

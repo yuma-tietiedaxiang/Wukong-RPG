@@ -426,37 +426,44 @@ public class Game {
     private void battleField() {
         System.out.println("You have left the village and entered the battlefield.");
 
-        // Initialize the battlefield map
-        char[][] battlefield = new char[15][20];
+        // Initialize the battlefield map dimensions
+        int battlefieldHeight = 15;
+        int battlefieldWidth = 20;
+        char[][] battlefield = new char[battlefieldHeight][battlefieldWidth];
 
-        // Fill the battlefield map with empty spaces
-        for (int i = 0; i < battlefield.length; i++) {
+        // Fill the battlefield with empty spaces
+        for (int i = 0; i < battlefieldHeight; i++) {
             Arrays.fill(battlefield[i], ' ');
         }
 
         // Set the boundaries of the battlefield
-        for (int i = 0; i < battlefield.length; i++) {
-            battlefield[i][0] = '■'; // Left wall
-            battlefield[i][battlefield[0].length - 1] = '■'; // Right wall
+        for (int i = 0; i < battlefieldHeight; i++) {
+            battlefield[i][0] = '■'; // Left boundary wall
+            battlefield[i][battlefieldWidth - 1] = '■'; // Right boundary wall
         }
-        for (int j = 0; j < battlefield[0].length; j++) {
-            battlefield[0][j] = '■'; // Top wall
-            battlefield[battlefield.length - 1][j] = '■'; // Bottom wall
+        for (int j = 0; j < battlefieldWidth; j++) {
+            battlefield[0][j] = '■'; // Top boundary wall
+            battlefield[battlefieldHeight - 1][j] = '■'; // Bottom boundary wall
         }
 
-        // Set the gate to return to the village
+        // Set the entrance to return to the village
         battlefield[7][0] = 'G'; // Village entrance
 
-        // Set the player's initial position on the battlefield
-        int battlePlayerX = battlefield[0].length - 2; // Column position
-        int battlePlayerY = 7; // Row position
+        // Set the initial position of the player on the battlefield
+        int battlePlayerX = 2; // Player's starting X coordinate
+        int battlePlayerY = 7; // Player's starting Y coordinate
 
-        // Initialize monsters and place them on the battlefield
+        // Initialize monsters and assign random positions
         List<Monster> monsters = gameEngine.initializeMonsters();
         for (Monster monster : monsters) {
-            int monsterX = monster.getX();
-            int monsterY = monster.getY();
-            battlefield[monsterY][monsterX] = 'M';
+            int x, y;
+            do {
+                x = random.nextInt(battlefieldWidth - 2) + 1; // Avoid boundaries
+                y = random.nextInt(battlefieldHeight - 2) + 1;
+            } while (battlefield[y][x] != ' ' || (x == battlePlayerX && y == battlePlayerY));
+            monster.setMonsterX(x);
+            monster.setMonsterY(y);
+            battlefield[y][x] = 'M';
         }
 
         // Player actions in the battlefield
@@ -596,7 +603,7 @@ public class Game {
             // Clear old position
             battlefield[y][x] = ' ';
 
-            // Randomly move monster
+            // Randomly move the monster
             int newX = x;
             int newY = y;
             int dir = random.nextInt(4);
@@ -615,23 +622,24 @@ public class Game {
                     break; // Move right
             }
 
-            // Check if the new position is valid
-            if (newX >= 1 && newX < battlefield[0].length - 1 && newY >= 1 && newY < battlefield.length - 1 && battlefield[newY][newX] == ' ') {
+            // Check if the new position is within boundaries and unoccupied
+            if (newX >= 1 && newX < battlefield[0].length - 1 && newY >= 1 && newY < battlefield.length - 1
+                    && battlefield[newY][newX] == ' ' && (newX != playerX || newY != playerY)) {
                 monster.setMonsterX(newX);
                 monster.setMonsterY(newY);
             }
 
-            // Place monster in new position
+            // Update monster position on the battlefield map
             x = monster.getX();
             y = monster.getY();
             battlefield[y][x] = 'M';
 
-            // Check if monster encounters player
+            // Check if the monster has encountered the player
             if (x == playerX && y == playerY) {
                 System.out.println("A monster has encountered you!");
                 battle(monster);
 
-                // Remove monster
+                // Remove monster from the map after battle
                 battlefield[y][x] = ' ';
                 iterator.remove();
                 break;
