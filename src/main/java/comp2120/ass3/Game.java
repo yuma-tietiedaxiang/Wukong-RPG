@@ -101,11 +101,16 @@ public class Game {
      * Each profession has different attributes such as health, damage, and defense.
      */
     private void chooseProfession() {
-        System.out.println("Please choose your role: ");
+        // Display each character with their attributes
         System.out.println("1. Monkey King");
+        System.out.println("   Health: 200, Stamina: 155, Damage: 30, Defense: 16, Critical Chance: 20%, Dodge Chance: 15%");
         System.out.println("2. Pigsy");
+        System.out.println("   Health: 200, Stamina: 110, Damage: 20, Defense: 22, Critical Chance: 30%, Dodge Chance: 10%");
         System.out.println("3. Sandy");
+        System.out.println("   Health: 300, Stamina: 75, Damage: 15, Defense: 30, Critical Chance: 25%, Dodge Chance: 5%");
         System.out.println("4. Tang Monk");
+        System.out.println("   Health: 160, Stamina: 155, Damage: 20, Defense: 20, Critical Chance: 40%, Dodge Chance: 25%");
+
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume the newline character
 
