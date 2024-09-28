@@ -2,6 +2,7 @@ package comp2120.ass3;
 
 import java.util.*;
 
+
 /**
  * The Game class handles the main game logic, including initializing the game, managing the player,
  * controlling the game loop, and handling interactions within the game world.
@@ -59,6 +60,11 @@ public class Game {
     public static int playerY;
 
     /**
+     * A list to keep track of the monsters currently on the battlefield.
+     */
+    private List<Monster> currentMonsters;
+
+    /**
      * Constructor to initialize the game, loading configurations and setting up the game engine.
      */
     public Game() {
@@ -71,6 +77,9 @@ public class Game {
                 "src/main/java/comp2120/ass3/resources/config/monsterConfig.json",
                 "src/main/java/comp2120/ass3/resources/config/levelConfig.json"
         );
+
+        // Initialize the current monsters list
+        currentMonsters = new ArrayList<>();
     }
 
     /**
@@ -80,7 +89,7 @@ public class Game {
     public void startGame() {
         System.out.println("Welcome to the game!");
         System.out.println("Your keyboard should now be set to English.");
-        System.out.println("Press 'Enter' to continue...'");
+        System.out.println("Press 'Enter' to continue...");
         scanner.nextLine();
         chooseProfession();
         initializeMap();
@@ -422,6 +431,7 @@ public class Game {
     /**
      * Allows the player to enter the battlefield and fight monsters.
      * The player can move around the battlefield, encounter monsters, and engage in combat.
+     * The number of monsters increases with each wave, and defeated monsters are removed.
      */
     private void battleField() {
         System.out.println("You have left the village and entered the battlefield.");
@@ -453,36 +463,52 @@ public class Game {
         int battlePlayerX = 2; // Player's starting X coordinate
         int battlePlayerY = 7; // Player's starting Y coordinate
 
-        // Generate a random number of monsters between 1 and 4
-        int numMonsters = random.nextInt(4) + 1; // random.nextInt(4) generates 0 to 3, so add 1
-
-        // Initialize monsters and assign random positions
-        List<Monster> monsters = new ArrayList<>();
-        for (int i = 0; i < numMonsters; i++) {
-            // Randomly select a monster type from available configurations
-            List<String> monsterNames = new ArrayList<>(gameEngine.getMonsterConfigs().keySet());
-            String randomMonsterName = monsterNames.get(random.nextInt(monsterNames.size()));
-
-            Monster monster = gameEngine.generateMonster(randomMonsterName);
-            if (monster != null) {
-                monsters.add(monster);
-            } else {
-                // If the monster configuration is not found, create a default monster
-                monster = new Monster("Default Monster", 100, 10, 5, 5, 5, 20);
-                monsters.add(monster);
+        // Check if currentMonsters is empty
+        if (currentMonsters.isEmpty()) {
+            if (wave > 3) {
+                // Game has been won, display victory message
+                System.out.println("Congratulations! You have defeated all monsters and won the game!");
+                System.out.println("Your total gems: " + player.getGold());
+                System.exit(0); // End the game
             }
-        }
 
-        // Assign random positions to each monster
-        for (Monster monster : monsters) {
-            int x, y;
-            do {
-                x = random.nextInt(battlefieldWidth - 2) + 1; // Avoid boundaries
-                y = random.nextInt(battlefieldHeight - 2) + 1;
-            } while (battlefield[y][x] != ' ' || (x == battlePlayerX && y == battlePlayerY));
-            monster.setMonsterX(x);
-            monster.setMonsterY(y);
-            battlefield[y][x] = 'M';
+            // Generate monsters for the current wave
+            int numMonsters = wave; // Number of monsters equals the wave number
+            currentMonsters = new ArrayList<>();
+
+            for (int i = 0; i < numMonsters; i++) {
+                // Randomly select a monster type from available configurations
+                List<String> monsterNames = new ArrayList<>(gameEngine.getMonsterConfigs().keySet());
+                String randomMonsterName = monsterNames.get(random.nextInt(monsterNames.size()));
+
+                Monster monster = gameEngine.generateMonster(randomMonsterName);
+                if (monster != null) {
+                    currentMonsters.add(monster);
+                } else {
+                    // If the monster configuration is not found, create a default monster
+                    monster = new Monster("Default Monster", 100, 10, 5, 5, 5, 20);
+                    currentMonsters.add(monster);
+                }
+            }
+
+            // Assign random positions to each monster
+            for (Monster monster : currentMonsters) {
+                int x, y;
+                do {
+                    x = random.nextInt(battlefieldWidth - 2) + 1; // Avoid boundaries
+                    y = random.nextInt(battlefieldHeight - 2) + 1;
+                } while (battlefield[y][x] != ' ' || (x == battlePlayerX && y == battlePlayerY));
+                monster.setMonsterX(x);
+                monster.setMonsterY(y);
+                battlefield[y][x] = 'M';
+            }
+        } else {
+            // Place existing monsters on the battlefield
+            for (Monster monster : currentMonsters) {
+                int x = monster.getX();
+                int y = monster.getY();
+                battlefield[y][x] = 'M';
+            }
         }
 
         // Player actions in the battlefield
@@ -525,26 +551,35 @@ public class Game {
                         if (battlefield[newY][newX] == 'M') { // Encounter a monster
                             System.out.println("You encountered a monster!");
                             Monster monster = null;
-                            Iterator<Monster> iterator = monsters.iterator();
+                            Iterator<Monster> iterator = currentMonsters.iterator();
                             while (iterator.hasNext()) {
                                 Monster m = iterator.next();
                                 if (m.getX() == newX && m.getY() == newY) {
                                     monster = m;
-                                    iterator.remove();
                                     break;
                                 }
                             }
                             if (monster != null) {
                                 battle(monster);
+                                if (monster.getHealth() <= 0) {
+                                    battlefield[newY][newX] = ' ';
+                                    iterator.remove();
+                                }
                             }
 
-                            // Remove monster
-                            battlefield[newY][newX] = ' ';
-
                             // Check if all monsters are defeated
-                            if (monsters.isEmpty()) {
-                                System.out.println("You have defeated all the monsters and returned to the village.");
-                                inBattlefield = false; // Return to village
+                            if (currentMonsters.isEmpty()) {
+                                if (wave == 3) {
+                                    // Display victory message and end the game
+                                    System.out.println("Congratulations! You have defeated all monsters and won the game!");
+                                    System.out.println("Your total gems: " + player.getGold());
+                                    System.exit(0); // End the game
+                                } else {
+                                    System.out.println("You have defeated all the monsters and returned to the village.");
+                                    wave++;
+                                    inBattlefield = false; // Return to village
+                                    slept = false; // Allow the player to rest again
+                                }
                             }
                         } else if (battlefield[newY][newX] == 'G') {
                             // Player returns to village
@@ -553,7 +588,7 @@ public class Game {
                         }
 
                         // Move monsters
-                        moveMonsters(battlefield, monsters, battlePlayerX, battlePlayerY);
+                        moveMonsters(battlefield, currentMonsters, battlePlayerX, battlePlayerY);
                     } else {
                         System.out.println("Bumped into a wall, cannot move!");
                     }
@@ -570,14 +605,13 @@ public class Game {
                 System.exit(0);
             }
         }
-        slept = false; // Player can rest again
     }
 
     /**
      * Displays the battlefield map, including the player's position and monster positions.
      * Also shows the player's current health, stamina, and gems.
      *
-     * @param battlefield the current state of the battlefield map
+     * @param battlefield   the current state of the battlefield map
      * @param battlePlayerX the player's current X position on the battlefield
      * @param battlePlayerY the player's current Y position on the battlefield
      */
@@ -608,9 +642,9 @@ public class Game {
      * If a monster encounters the player, a battle ensues.
      *
      * @param battlefield the current state of the battlefield map
-     * @param monsters the list of monsters on the battlefield
-     * @param playerX the player's current X position
-     * @param playerY the player's current Y position
+     * @param monsters    the list of monsters on the battlefield
+     * @param playerX     the player's current X position
+     * @param playerY     the player's current Y position
      */
     private void moveMonsters(char[][] battlefield, List<Monster> monsters, int playerX, int playerY) {
         Iterator<Monster> iterator = monsters.iterator();
@@ -658,28 +692,28 @@ public class Game {
                 System.out.println("A monster has encountered you!");
                 battle(monster);
 
-                // Remove monster from the map after battle
-                battlefield[y][x] = ' ';
-                iterator.remove();
+                // Check if monster is defeated
+                if (monster.getHealth() <= 0) {
+                    // Remove monster from the map after battle
+                    battlefield[y][x] = ' ';
+                    iterator.remove();
+
+                    // Check if all monsters are defeated
+                    if (currentMonsters.isEmpty()) {
+                        if (wave == 3) {
+                            System.out.println("Congratulations! You have defeated all monsters and won the game!");
+                            System.out.println("Your total gems: " + player.getGold());
+                            System.exit(0);
+                        } else {
+                            System.out.println("You have defeated all the monsters and returned to the village.");
+                            wave++;
+                            slept = false;
+                        }
+                    }
+                }
                 break;
             }
         }
-    }
-
-    /**
-     * Generates a monster based on the specified name.
-     * If the monster is not found in the configuration, a default monster is created.
-     *
-     * @param name the name of the monster to generate
-     * @return a Monster object with the specified attributes or a default monster if not found
-     */
-    private Monster generateMonster(String name) {
-        Monster monster = gameEngine.generateMonster(name);
-        if (monster == null) {
-            System.out.println("Monster not found in configuration. Using default values.");
-            monster = new Monster("Default Monster", 100, 10, 5, 5, 5, 20);
-        }
-        return monster;
     }
 
     /**
@@ -713,7 +747,6 @@ public class Game {
                         if (monster.getHealth() <= 0) {
                             System.out.println("You defeated the " + monster.getName() + "!");
                             player.addGold(monster.getGoldReward());
-                            wave++;
                             inBattle = false;
                         } else {
                             monsterAttack(monster);
@@ -730,7 +763,6 @@ public class Game {
                         if (monster.getHealth() <= 0) {
                             System.out.println("You defeated the " + monster.getName() + "!");
                             player.addGold(monster.getGoldReward());
-                            wave++;
                             inBattle = false;
                         } else {
                             monsterAttack(monster);
@@ -747,7 +779,6 @@ public class Game {
                         if (monster.getHealth() <= 0) {
                             System.out.println("You defeated the " + monster.getName() + "!");
                             player.addGold(monster.getGoldReward());
-                            wave++;
                             inBattle = false;
                         } else {
                             monsterAttack(monster);
