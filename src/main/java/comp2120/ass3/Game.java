@@ -380,7 +380,39 @@ public class Game {
      */
     private void petShop() {
         System.out.println("You arrive at the pet shop.");
-        System.out.println("Temporarily unavailable.");
+        List<MythicalBeast> beasts = new ArrayList<>();
+        beasts.add(new MythicalBeast("Phoenix", 50, 30)); // Example mythical beasts
+        beasts.add(new MythicalBeast("Dragon", 70, 50));
+        beasts.add(new MythicalBeast("Unicorn", 30, 20));
+
+        boolean inShop = true;
+        while (inShop) {
+            System.out.println("Your gems: " + player.getGold());
+            System.out.println("Please select a mythical beast to purchase: ");
+            int index = 1;
+            for (MythicalBeast beast : beasts) {
+                System.out.println(index + ". " + beast.getName() + " - price: 100 Gems, Attack Bonus: " + beast.getAttackBonus() + ", Defense Bonus: " + beast.getDefenseBonus());
+                index++;
+            }
+            System.out.println("0. Leave the shop");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            if (choice == 0) {
+                inShop = false;
+            } else if (choice > 0 && choice <= beasts.size()) {
+                MythicalBeast selectedBeast = beasts.get(choice - 1);
+                if (player.spendGold(100)) { // Assume all beasts cost 100 gems
+                    player.summonBeast(selectedBeast); // Summon the purchased beast
+                    System.out.println("You purchased and summoned: " + selectedBeast.getName());
+                } else {
+                    System.out.println("Insufficient gems, unable to purchase the mythical beast.");
+                }
+            } else {
+                System.out.println("Invalid selection, please re-enter.");
+            }
+        }
+
         System.out.println("Press 'Enter' to return...");
         scanner.nextLine();
     }
@@ -876,6 +908,15 @@ public class Game {
         System.out.println("Stamina: " + player.getStamina() + "/" + player.getMaxStamina());
         System.out.println("Damage: " + player.getDamage());
         System.out.println("Defense: " + player.getDefense());
+        MythicalBeast summonedBeast = player.getSummonedBeast();
+        if (summonedBeast != null) {
+            System.out.println("Summoned Beast: " + summonedBeast.getName() +
+                    " (Attack Bonus: " + summonedBeast.getAttackBonus() +
+                    ", Defense Bonus: " + summonedBeast.getDefenseBonus() + ")");
+        } else {
+            System.out.println("No beast summoned.");
+        }
+
         System.out.println("Critical Chance: " + player.getCriticalChance() + "%");
         System.out.println("Dodge Chance: " + player.getDodgeChance() + "%");
         System.out.println("Gems: " + player.getGold());

@@ -21,6 +21,7 @@ package comp2120.ass3;
  * @see Inventory
  *
  * @author Jun Zhu
+ * @author Yingxuan Tang
  */
 public class Player implements IPlayer {
     // The name of the player character, such as "Monkey King" or "Pigsy".
@@ -59,6 +60,10 @@ public class Player implements IPlayer {
     private int x;
     private int y;
 
+    //// The mythical beast currently summoned
+    private MythicalBeast summonedBeast;
+
+
     /**
      * Constructs a Player object with the specified attributes.
      *
@@ -85,6 +90,26 @@ public class Player implements IPlayer {
         this.x = 0;
         this.y = 0;
     }
+
+    /**
+     * Summons a mythical beast for the player.
+     *
+     * This method sets the currently summoned mythical beast for the player
+     * and prints a message to the console. The summoned beast provides additional
+     * attribute bonuses (such as attack and defense bonuses) to the player,
+     * which are applied in methods like {@code getDamage()} and {@code getDefense()}.
+     *
+     *
+     * @param beast The mythical beast object to be summoned, which contains
+     *              its name and attribute bonuses (attack and defense bonuses).
+     *              If the player already has a summoned beast, this method will
+     *              replace the currently summoned beast.
+     */
+    public void summonBeast(MythicalBeast beast) {
+        this.summonedBeast = beast;
+        System.out.println("You summoned the mythical beast: " + beast.getName());
+    }
+
 
     /**
      * Player recovers health and stamina during rest. Cannot exceed the maximum value for both.
@@ -148,6 +173,9 @@ public class Player implements IPlayer {
         if (inventory.getEquippedWeapon() != null) {
             totalDamage += inventory.getEquippedWeapon().getDamage(); // Add equipped weapon's damage to base damage.
         }
+        if (summonedBeast != null) {
+            totalDamage += summonedBeast.getAttackBonus(); // Mythological Beast attack bonus.
+        }
         return totalDamage;
     }
 
@@ -161,6 +189,9 @@ public class Player implements IPlayer {
         int totalDefense = this.defense;
         if (inventory.getEquippedArmor() != null) {
             totalDefense += inventory.getEquippedArmor().getDefense(); // Add equipped armor's defense to base defense.
+        }
+        if (summonedBeast != null) {
+            totalDefense += summonedBeast.getDefenseBonus(); // Mythological Beast defense bonus.
         }
         return totalDefense;
     }
@@ -316,4 +347,9 @@ public class Player implements IPlayer {
     public int getDamage() {
         return attack();
     }
+
+    public MythicalBeast getSummonedBeast() {
+        return summonedBeast;
+    }
+
 }
