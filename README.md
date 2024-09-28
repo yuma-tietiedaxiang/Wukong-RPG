@@ -19,7 +19,7 @@ Including:
 - **[Meeting Agenda](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AYAg)**
 - **[Meeting Minutes](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AwAq)**
 
-You can access the Confluence pages directly from the sidebar by navigating to Plan > Confluence. 
+You can also access the Confluence pages from the sidebar by navigating to Plan > Confluence. 
 
 Click on the **blue links** to check out the corresponding content.
 
