@@ -30,10 +30,24 @@ public class GameTest {
 
     @Test
     public void testClinic() {
-        String input = "\n1\nd\nd\nd\nd\nd\nd\nd\nd\nw\nw\nw\nw\n1\n2\n3\n0\n\nq\n";
-        Scanner scanner = new Scanner(input);
-        Game game = new Game(scanner);
-        game.startGame();
+        {
+            String input = "\n1\nd\nd\nd\nd\nd\nd\nd\nd\nw\nw\nw\nw\n1\n0\n\nq\n";
+            Scanner scanner = new Scanner(input);
+            Game game = new Game(scanner);
+            game.startGame();
+        }
+        {
+            String input = "\n1\nd\nd\nd\nd\nd\nd\nd\nd\nw\nw\nw\nw\n2\n0\n\nq\n";
+            Scanner scanner = new Scanner(input);
+            Game game = new Game(scanner);
+            game.startGame();
+        }
+        {
+            String input = "\n1\nd\nd\nd\nd\nd\nd\nd\nd\nw\nw\nw\nw\n3\n0\n\nq\n";
+            Scanner scanner = new Scanner(input);
+            Game game = new Game(scanner);
+            game.startGame();
+        }
     }
 
     @Test
