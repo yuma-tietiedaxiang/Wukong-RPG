@@ -71,6 +71,8 @@ The project uses the following dependencies:
 
 ## [Game Flow](https://comp2120-fri-a3-a.atlassian.net/wiki/spaces/SD/pages/edit-v2/9044018#Game-Flow)
 
+Click on the blue title 'Game Flow' to go to the Confluence Page for more details on the Game Flow.
+
 ### Welcome and Introduction
 - Press 'Enter' to start the game and ensure your keyboard is set to English.
 
