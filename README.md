@@ -3,23 +3,25 @@
 
 ## ❗️Important❗️
 
-We use [Jira](https://comp2120-fri-a3-a.atlassian.net/jira/software/projects/SCRUM/boards/1) to manage our project.
+### We use [Jira](https://comp2120-fri-a3-a.atlassian.net/jira/software/projects/SCRUM/boards/1?atlOrigin=eyJpIjoiMjg3NjBkNjNmY2M5NGNiODllMjQwMmY4MTY3N2QwNDAiLCJwIjoiaiJ9) to manage our project.
 
-Our Wikis are on [Confluence](https://comp2120-fri-a3-a.atlassian.net/wiki/spaces/SD/overview).
+### Our Wikis are managed through [Confluence](https://comp2120-fri-a3-a.atlassian.net/wiki/spaces/SD/overview).
 
 Including:
 
-- [Project Plan](https://comp2120-fri-a3-a.atlassian.net/wiki/x/C4AF)
-- [Project Summary](https://comp2120-fri-a3-a.atlassian.net/wiki/x/MgCK)
-- [Game Skeleton](https://comp2120-fri-a3-a.atlassian.net/wiki/x/QoAl)
-- [Installation & Setup](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoB_/)
-- [Test Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQCL)
-- [License Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoCL)
-- [Working Hour Record](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQBV)
-- [Meeting Agenda](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AYAg)
-- [Meeting Minutes](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AwAq)
+- **[Project Plan](https://comp2120-fri-a3-a.atlassian.net/wiki/x/C4AF)**
+- **[Project Summary](https://comp2120-fri-a3-a.atlassian.net/wiki/x/MgCK)**
+- **[Game Skeleton](https://comp2120-fri-a3-a.atlassian.net/wiki/x/QoAl)**
+- **[Installation & Setup](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoB_/)**
+- **[Test Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQCL)**
+- **[License Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoCL)**
+- **[Working Hour Record](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQBV)**
+- **[Meeting Agenda](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AYAg)**
+- **[Meeting Minutes](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AwAq)**
 
-You can also go to Confluence by Plan > Confluence at the sidebar.
+You can access the Confluence pages directly from the sidebar by navigating to Plan > Confluence. 
+
+Click on the **blue links** to check out the corresponding content.
 
 
 ## [Game Background](https://comp2120-fri-a3-a.atlassian.net/wiki/spaces/SD/pages/edit-v2/9044018#Game-Background)
@@ -108,3 +110,14 @@ The project uses the following dependencies:
 ```text
 Congratulations! You have defeated all monsters and won the game!
 Your total gems: [number of gems]
+```
+
+---
+## Use Cases
+![Use Cases](use_cases.png)
+
+---
+## UML
+![UML](uml.png)
+
+
