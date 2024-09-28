@@ -1,5 +1,7 @@
 package comp2120.ass3;
 
+import java.util.Scanner;
+
 /**
  * The RPGGame class contains the main method to start the RPG (Role-Playing Game).
  * This is the entry point of the game application, where the game is initialized and started.
@@ -27,7 +29,7 @@ public class RPGGame {
      */
     public static void main(String[] args) {
         // Create an instance of the Game class
-        Game game = new Game();
+        Game game = new Game(new Scanner(System.in));
 
         // Start the game by calling the startGame() method
         game.startGame();

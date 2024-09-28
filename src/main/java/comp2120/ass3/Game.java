@@ -67,8 +67,8 @@ public class Game {
     /**
      * Constructor to initialize the game, loading configurations and setting up the game engine.
      */
-    public Game() {
-        scanner = new Scanner(System.in);
+    public Game(Scanner inScanner) {
+        scanner = inScanner;
         random = new Random();
 
         // Initialize the game engine with configuration files
@@ -977,5 +977,9 @@ public class Game {
         } else {
             System.out.println("Invalid choice.");
         }
+    }
+
+    public boolean isSlept() {
+        return slept;
     }
 }
