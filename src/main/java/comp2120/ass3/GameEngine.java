@@ -15,6 +15,7 @@ import java.util.*;
  * the game environment.
  *
  * @author Yu Ma
+ * @author Jun Zhu
  */
 public class GameEngine {
     private Map<String, MonsterConfig> monsterConfigs; // Stores monster configurations
