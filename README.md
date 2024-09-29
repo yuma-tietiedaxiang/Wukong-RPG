@@ -68,9 +68,58 @@ The project uses the following dependencies:
     - Unzip the downloaded file and move it to the /usr/local/ directory:
   ```bash
     sudo mv apache-maven-3.x.x /usr/local/apache-maven-3.9.9
-
 ---
+1. **Configure Environment Variables**:
 
+  - Open the terminal and edit the ~/.zshrc file (if you are using Zsh):
+
+    ```bash
+     nano ~/.zshrc
+    ```
+
+  - Add the following lines at the end of the file:
+
+    ```bash
+     export M2_HOME=/usr/local/apache-maven-3.9.9
+     export PATH=$M2_HOME/bin:$PATH
+    ```
+
+  - Save and exit the editor (in nano, press CTRL + X, then Y to confirm saving).
+
+2. **Apply Changes**: Run the following command in the terminal to apply the changes:
+
+   ```bash
+    source ~/.zshrc
+   ```
+
+### Verify Maven Installation
+
+- Run the following command to verify that Maven has been installed successfully:
+
+  ```bash
+   mvn -v
+  ```
+
+  You should see the Maven version information.
+
+### Run the Project
+
+1. **Navigate to Project Directory**: Make sure you are in the root directory of the project, for example:
+
+   ```bash
+    cd /path/to/your/project/A2-GP
+   ```
+
+2. **Install Dependencies**: Run the following command to install the required project dependencies:
+
+   ```bash
+    mvn install
+   ```
+
+3. **Run the Game**: Use the following command to start your RPG game:
+   ```bash
+    mvn exec:java -Dexec.mainClass="comp2120.ass3.RPGGame"
+   ```
 ## [Game Flow](https://comp2120-fri-a3-a.atlassian.net/wiki/spaces/SD/pages/edit-v2/9044018#Game-Flow)
 
 Click on the blue title 'Game Flow' to go to the Confluence Page for more details on the Game Flow.
