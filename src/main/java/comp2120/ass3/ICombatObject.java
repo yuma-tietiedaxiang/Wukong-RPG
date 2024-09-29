@@ -17,6 +17,7 @@ package comp2120.ass3;
  * Implementing classes might include {@link Player} and {@link Monster}.
  *
  * @author Jun Zhu
+ * @author Fan Yu
  */
 public interface ICombatObject {
 

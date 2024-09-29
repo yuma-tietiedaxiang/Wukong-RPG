@@ -25,6 +25,7 @@ package comp2120.ass3;
  * @see Inventory
  *
  * @author Jun Zhu
+ * @author Fan Yu
  */
 public interface IPlayer extends ICombatObject {
     /**

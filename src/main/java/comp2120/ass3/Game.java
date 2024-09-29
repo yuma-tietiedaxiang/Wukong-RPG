@@ -14,6 +14,7 @@ import java.util.*;
  * @author Jun Zhu
  * @author Yu Ma
  * @author Yingxuan Tang
+ * @author Fan Yu
  */
 public class Game {
     /**

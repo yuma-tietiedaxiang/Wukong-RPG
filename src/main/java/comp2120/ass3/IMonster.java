@@ -25,6 +25,7 @@ package comp2120.ass3;
  * @see Player
  *
  * @author Jun Zhu
+ * @author Fan Yu
  */
 public interface IMonster extends ICombatObject {
     // This interface inherits all methods from ICombatObject,
