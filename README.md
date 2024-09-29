@@ -12,12 +12,14 @@ Including:
 - **[Project Plan](https://comp2120-fri-a3-a.atlassian.net/wiki/x/C4AF)**
 - **[Project Summary](https://comp2120-fri-a3-a.atlassian.net/wiki/x/MgCK)**
 - **[Game Skeleton](https://comp2120-fri-a3-a.atlassian.net/wiki/x/QoAl)**
+- **[Game Engine](https://comp2120-fri-a3-a.atlassian.net/wiki/x/loCK)**
 - **[Installation & Setup](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoB_/)**
 - **[Test Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQCL)**
 - **[License Document](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AoCL)**
 - **[Working Hour Record](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AQBV)**
 - **[Meeting Agenda](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AYAg)**
 - **[Meeting Minutes](https://comp2120-fri-a3-a.atlassian.net/wiki/x/AwAq)**
+- **[Reflection](https://comp2120-fri-a3-a.atlassian.net/wiki/x/mwCM)**
 
 You can also access the Confluence pages from the sidebar by navigating to Plan > Confluence. 
 
