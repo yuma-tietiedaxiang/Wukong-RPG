@@ -14,12 +14,11 @@ import java.util.*;
  * This class serves as the core engine of the game, providing functionality for setting up and controlling
  * the game environment.
  *
- * @author Jun Zhu
+ * @author Yu Ma
  */
 public class GameEngine {
     private Map<String, MonsterConfig> monsterConfigs; // Stores monster configurations
-    private List<LevelConfig> levels; // List of levels in the game
-    private LevelConfig currentLevelConfig; // The current level configuration
+
     private char[][] map; // 2D array representing the game map
     private int playerX; // Player's initial X-coordinate on the map
     private int playerY; // Player's initial Y-coordinate on the map
@@ -35,7 +34,7 @@ public class GameEngine {
     public GameEngine(String mapConfigFile, String monsterConfigFile, String levelConfigFile) {
         loadMonsterConfig(monsterConfigFile);  // Load monster configurations
         loadMapConfig(mapConfigFile);          // Load map configurations
-        loadLevelConfig(levelConfigFile);      // Load level configurations
+
     }
 
     /**
@@ -93,45 +92,7 @@ public class GameEngine {
         playerY = mapConfig.getPlayerStart().get("y");
     }
 
-    /**
-     * Loads level configurations from the specified JSON file. The level configuration defines different levels in the game,
-     * each with its own set of monsters and their positions on the map.
-     *
-     * @param levelConfigFile the file path to the level configuration JSON file
-     */
-    public void loadLevelConfig(String levelConfigFile) {
-        try {
-            Gson gson = new Gson();
-            LevelData levelData = gson.fromJson(new FileReader(levelConfigFile), LevelData.class);
-            levels = levelData.getLevels();
-            // For simplicity, use the first level as the current level
-            if (levels != null && !levels.isEmpty()) {
-                currentLevelConfig = levels.get(0);
-            }
-        } catch (IOException e) {
-            System.out.println("Failed to load level configuration.");
-            e.printStackTrace();
-        }
-    }
 
-    /**
-     * Initializes the monsters for the current level based on the current level configuration.
-     * This method creates Monster objects and sets their initial positions according to the level configuration.
-     *
-     * @return a list of Monster objects initialized for the current level
-     */
-    public List<Monster> initializeMonsters() {
-        currentMonsters.clear();
-        if (currentLevelConfig != null) {
-            for (MonsterLevelConfig mlc : currentLevelConfig.getMonsters()) {
-                Monster monster = generateMonster(mlc.getName());
-                if (monster != null) {
-                    currentMonsters.add(monster);
-                }
-            }
-        }
-        return currentMonsters;
-    }
 
     public Map<String, MonsterConfig> getMonsterConfigs() {
         return monsterConfigs;
@@ -361,51 +322,3 @@ class MonsterLevelConfig {
     }
 }
 
-/**
- * The LevelConfig class represents the configuration of a level in the game, including the level number and
- * the list of monsters in that level with their positions. This configuration is used by the GameEngine to
- * set up the game environment for each level.
- */
-class LevelConfig {
-    private int levelNumber; // The number of the level
-    private List<MonsterLevelConfig> monsters; // List of monsters in the level
-
-    // Getters
-
-    /**
-     * Returns the number of the level.
-     *
-     * @return the number of the level
-     */
-    public int getLevelNumber() {
-        return levelNumber;
-    }
-
-    /**
-     * Returns the list of monsters in the level.
-     *
-     * @return a list of MonsterLevelConfig objects representing the monsters in the level
-     */
-    public List<MonsterLevelConfig> getMonsters() {
-        return monsters;
-    }
-}
-
-/**
- * The LevelData class is a container for holding the configurations of all levels in the game.
- * It contains a list of LevelConfig objects, each representing a level and its corresponding settings.
- */
-class LevelData {
-    private List<LevelConfig> levels; // List of all levels in the game
-
-    // Getter
-
-    /**
-     * Returns the list of levels in the game.
-     *
-     * @return a list of LevelConfig objects representing all levels in the game
-     */
-    public List<LevelConfig> getLevels() {
-        return levels;
-    }
-}

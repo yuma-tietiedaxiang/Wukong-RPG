@@ -24,6 +24,7 @@ package comp2120.ass3;
  * @see Player
  *
  * @author Jun Zhu
+ * @author Yu Ma
  */
 public class Monster implements IMonster {
     // The name of the monster, such as "Goblin" or "Orc".

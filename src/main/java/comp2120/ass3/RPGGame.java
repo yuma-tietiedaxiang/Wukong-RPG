@@ -18,6 +18,7 @@ import java.util.Scanner;
  * any game logic itself.
  *
  * @author Jun Zhu
+ * @author Yu Ma
  */
 public class RPGGame {
 

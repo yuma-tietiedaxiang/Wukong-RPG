@@ -22,6 +22,7 @@ package comp2120.ass3;
  *
  * @author Jun Zhu
  * @author Yingxuan Tang
+ * @author Yu Ma
  */
 public class Player implements IPlayer {
     // The name of the player character, such as "Monkey King" or "Pigsy".
