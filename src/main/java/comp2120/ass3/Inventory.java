@@ -32,6 +32,7 @@ import java.util.List;
  * @see Game
  *
  * @author Jun Zhu
+ * @author Yu Ma
  */
 public class Inventory {
     // A list to store all items in the inventory.

@@ -21,6 +21,7 @@ package comp2120.ass3;
  * @see Player
  *
  * @author Jun Zhu
+ * @author Yu Ma
  */
 public class Item {
     // The name of the item.

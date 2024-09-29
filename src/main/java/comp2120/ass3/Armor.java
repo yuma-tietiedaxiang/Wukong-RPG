@@ -8,6 +8,7 @@ package comp2120.ass3;
  * against enemy attacks. Each armor has a unique name, price, and defense value.</p>
  *
  * @author Jun Zhu
+ * @author Yu Ma
  *
  * @see Item
  */

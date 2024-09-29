@@ -12,6 +12,8 @@ import java.util.*;
  * displaying the game state and processing user inputs.</p>
  *
  * @author Jun Zhu
+ * @author Yu Ma
+ * @author Yingxuan Tang
  */
 public class Game {
     /**
@@ -772,8 +774,17 @@ public class Game {
             System.out.println("3. Heavy Attack (Damage +160, consumes 20 stamina)");
             System.out.println("4. Escape (Consumes 10 stamina)");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            int choice = -1; // 初始化 choice
+            while (true) {
+                try {
+                    choice = scanner.nextInt(); // 尝试读取输入
+                    scanner.nextLine(); // 消费换行符
+                    break; // 成功读取到整数，退出循环
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input, please enter an integer.");
+                    scanner.nextLine(); // 清除无效输入
+                }
+            }
 
             switch (choice) {
                 case 1:

@@ -16,6 +16,7 @@ package comp2120.ass3;
  * </pre>
  *
  * @author Jun Zhu
+ * @author Yu Ma
  */
 public class Weapon extends Item {
 
