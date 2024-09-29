@@ -293,33 +293,3 @@ class MonsterConfig {
     }
 }
 
-/**
- * The MonsterLevelConfig class represents the configuration of a monster within a specific level,
- * including its name and its starting position on the map. This configuration is used by the GameEngine
- * to place monsters on the map when a level is initialized.
- */
-class MonsterLevelConfig {
-    private String name; // Name of the monster
-    private Map<String, Integer> position; // Map storing the starting X and Y coordinates of the monster
-
-    // Getters
-
-    /**
-     * Returns the name of the monster.
-     *
-     * @return the name of the monster
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Returns the position of the monster as a map containing X and Y coordinates.
-     *
-     * @return a map with keys "x" and "y" representing the monster's starting coordinates
-     */
-    public Map<String, Integer> getPosition() {
-        return position;
-    }
-}
-
